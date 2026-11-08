@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="قواعد اللغة الصينية الأساسية مشروحة بالعربية بدون لغة وسيطة — ترتيب الجملة، النفي، الأسئلة، الأفعال">
+<title>قواعد اللغة الصينية — بالعربية</title>
+<link rel="stylesheet" href="common.css">
+<script src="progress.js"></script>
+<style>
+  :root{
+    --bg:#f7f5f0; --card:#ffffff; --line:#e6e0d4;
+    --txt:#2b2b2b; --muted:#8a8375; --accent:#b5622a; --accent-bg:#fff8ef;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:20px 20px 60px; background:var(--bg); color:var(--txt);
+    font-family:"Noto Naskh Arabic","Traditional Arabic","Segoe UI",serif;
+    line-height:1.7;
+  }
+  .wrap{max-width:900px; margin:0 auto}
+  .back{display:inline-block; color:var(--muted); text-decoration:none; margin-bottom:10px; font-size:.9rem}
+  .back:hover{color:var(--accent)}
+  header{text-align:center; border-bottom:2px solid var(--line); padding-bottom:20px; margin-bottom:26px}
+  h1{margin:0 0 6px; font-size:1.8rem; color:var(--accent)}
+  header p{margin:0; color:var(--muted); font-size:.95rem}
+
+  .hero{
+    background:var(--accent-bg); border:1px dashed var(--accent);
+    border-radius:16px; padding:18px 22px; margin-bottom:26px; text-align:center;
+  }
+  .hero strong{color:var(--accent); font-size:1.1rem}
+  .hero p{margin:6px 0 0; color:var(--txt); font-size:.95rem}
+
+  .controls{
+    display:flex; gap:14px; justify-content:center; align-items:center;
+    background:var(--card); border:1px solid var(--line);
+    border-radius:14px; padding:12px 18px; margin-bottom:22px; flex-wrap:wrap;
+  }
+  .controls label{font-size:.9rem; color:var(--muted)}
+  .controls input[type=range]{width:160px; accent-color:var(--accent)}
+  .rate-val{font-weight:700; color:var(--accent); min-width:42px; text-align:center}
+
+  details.rule{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:18px; margin-bottom:14px; overflow:hidden;
+    transition:box-shadow .2s, border-color .2s;
+  }
+  details.rule[open]{
+    border-color:var(--accent);
+    box-shadow:0 6px 20px rgba(181,98,42,.08);
+  }
+  summary.rule-header{
+    padding:16px 22px; cursor:pointer; list-style:none;
+    display:flex; align-items:center; gap:14px;
+    font-size:1.1rem; font-weight:700; color:var(--txt); user-select:none;
+  }
+  summary.rule-header::-webkit-details-marker{display:none}
+  summary.rule-header::after{
+    content:"▾"; margin-right:auto; color:var(--accent);
+    font-size:1.2rem; transition:transform .2s;
+  }
+  details[open] summary.rule-header::after{transform:rotate(180deg)}
+  .rule-num{
+    background:var(--accent); color:#fff; border-radius:8px;
+    padding:2px 10px; font-size:.9rem; min-width:28px; text-align:center;
+  }
+  .rule-body{padding:0 22px 20px}
+  .rule-text{
+    background:var(--accent-bg); border-right:4px solid var(--accent);
+    padding:10px 14px; border-radius:8px; margin-bottom:16px; font-size:.95rem;
+  }
+
+  .example{
+    display:flex; align-items:center; gap:16px;
+    padding:12px 0; border-bottom:1px dashed var(--line);
+  }
+  .example:last-child{border-bottom:none}
+  .example-text{flex:1}
+  .example-cn{
+    font-family:"Noto Sans SC","Microsoft YaHei","SimHei",sans-serif;
+    font-size:1.8rem; line-height:1.2; color:var(--txt); margin-bottom:4px;
+  }
+  .example-ar{color:var(--accent); font-weight:700; font-size:1rem}
+  .example-meaning{color:var(--muted); font-size:.9rem}
+  .example-play{
+    background:var(--card); border:1px solid var(--line); color:var(--txt);
+    cursor:pointer; border-radius:10px; width:44px; height:44px; font-size:1.1rem;
+    display:flex; align-items:center; justify-content:center;
+    transition:all .18s; flex-shrink:0;
+  }
+  .example-play:hover{
+    border-color:var(--accent); color:var(--accent);
+    background:var(--accent-bg); transform:scale(1.05);
+  }
+  .example-play.playing{
+    background:var(--accent); color:#fff; border-color:var(--accent);
+    animation:pulse 1s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 3px rgba(181,98,42,.2)}
+    50%{box-shadow:0 0 0 8px rgba(181,98,42,.05)}
+  }
+  .note{
+    background:var(--accent-bg); border:1px dashed var(--accent);
+    border-radius:14px; padding:16px 20px; margin-top:26px; font-size:.9rem;
+  }
+  .note strong{color:var(--accent)}
+  footer{text-align:center; margin-top:40px; color:var(--muted); font-size:.82rem}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
+<main class="wrap" id="main-content">
+  <a href="index.html" class="back">← الرئيسية</a>
+
+  <header>
+    <h1>قواعد اللغة الصينية</h1>
+    <p>أبسط مما تتوقع — بدون تصريف، بدون جنس، بدون عدد</p>
+  </header>
+
+  <div class="hero">
+    <strong>💡 الفكرة الكبرى</strong>
+    <p>الفعل الصيني لا يتغير حسب الزمن أو الشخص. لا مذكر/مؤنث. لا جمع للحروف. الترتيب بسيط: فاعل + فعل + مفعول.</p>
+  </div>
+
+  <div class="controls" role="region" aria-label="التحكم بالصوت">
+    <label for="rate">سرعة النطق:</label>
+    <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="1" aria-label="سرعة النطق">
+    <span class="rate-val" id="rate-val" aria-live="polite">1.0×</span>
+  </div>
+
+  <div id="rules"></div>
+
+  <div class="note">
+    <strong>ملاحظة:</strong> الصوت يُشغَّل كلمةً كلمة — كل حرف يُجرَّب أولاً في مجلد <code>hsk</code>، ثم في <code>syllabs</code>. إن لم يوجد ملف (مثل <code>的</code> أو <code>了</code>)، يُتخطى بصمت دون توقف.
+  </div>
+
+  <footer>القواعد — بالعربية فقط، بدون لغة وسيطة</footer>
+</main>
+
+<script>
+(function(){
+  const HSK_DIR  = 'audio-cmn/64k/hsk/';
+  const SYLL_DIR = 'audio-cmn/64k/syllabs/';
+
+  let currentRate = 1.0;
+  let playbackToken = 0;
+  let currentAudio = null;
+
+  const rateInput = document.getElementById('rate');
+  const rateLabel = document.getElementById('rate-val');
+  rateInput.addEventListener('input', () => {
+    currentRate = parseFloat(rateInput.value);
+    rateLabel.textContent = currentRate.toFixed(1) + '×';
+    if (currentAudio) { try { currentAudio.playbackRate = currentRate; } catch(e){} }
+  });
+
+  function stopPlayback() {
+    playbackToken++;
+    if (currentAudio) {
+      try { currentAudio.pause(); } catch(e){}
+      currentAudio = null;
+    }
+  }
+
+  function playOne(url, myToken) {
+    return new Promise(resolve => {
+      if (myToken !== playbackToken) { resolve(false); return; }
+      const a = new Audio();
+      a.playbackRate = currentRate;
+      let settled = false;
+      const settle = ok => {
+        if (settled) return;
+        settled = true;
+        if (currentAudio === a) currentAudio = null;
+        resolve(ok);
+      };
+      a.addEventListener('ended', () => settle(true), { once:true });
+      a.addEventListener('error', () => settle(false), { once:true });
+      a.addEventListener('pause', () => { if (!a.ended) settle(false); }, { once:true });
+      a.src = encodeURI(url);
+      currentAudio = a;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => settle(false));
+    });
+  }
+
+  async function playSequence(spec, buttonEl) {
+    stopPlayback();
+    const myToken = playbackToken;
+    if (buttonEl) buttonEl.classList.add('playing');
+
+    const items = spec.split(',');
+    for (const item of items) {
+      if (myToken !== playbackToken) break;
+      const [char, syll] = item.split(':');
+      let ok = false;
+      if (char) ok = await playOne(HSK_DIR + 'cmn-' + char + '.mp3', myToken);
+      if (myToken !== playbackToken) break;
+      if (!ok && syll) await playOne(SYLL_DIR + 'cmn-' + syll + '.mp3', myToken);
+    }
+
+    if (buttonEl) {
+      buttonEl.classList.remove('playing');
+      if (window.CNProgress) {
+        CNProgress.addXP(CNProgress.XP_REWARDS.audioPlay);
+        CNProgress.recordActivity('audio', {});
+        CNProgress.checkAchievements();
+      }
+    }
+  }
+
+  const rules = [
+    {
+      title:'ترتيب الكلمات: فاعل + فعل + مفعول',
+      text:'الترتيب في الصينية مثل العربية والإنجليزية تماماً. لا تغيير.',
+      examples:[
+        { cn:'我是人', ar:'وُو شِ ژِن', meaning:'أنا إنسان', audio:'我:wo3,是:shi4,人:ren2' },
+        { cn:'你喝水', ar:'نِي هِ شُوِي', meaning:'أنت تشرب ماء', audio:'你:ni3,喝:he1,水:shui3' },
+        { cn:'我学中文', ar:'وُو شُوِه ژُونگ وِن', meaning:'أنا أتعلم الصينية', audio:'我:wo3,学:xue2,中:zhong1,文:wen2' }
+      ]
+    },
+    {
+      title:'الأفعال لا تتغير أبداً',
+      text:'أجمل ميزة: الفعل يبقى كما هو مع كل الضمائر وكل الأزمنة. الزمن من السياق أو من كلمات مثل "أمس" و"غداً".',
+      examples:[
+        { cn:'我去', ar:'وُو چُو', meaning:'أذهب / ذهبت / سأذهب', audio:'我:wo3,去:qu4' },
+        { cn:'你去', ar:'نِي چُو', meaning:'تذهب / ذهبت', audio:'你:ni3,去:qu4' },
+        { cn:'他去', ar:'تَا چُو', meaning:'يذهب / ذهب', audio:'他:ta1,去:qu4' }
+      ]
+    },
+    {
+      title:'أداة الملكية 的',
+      text:'ضع 的 بعد المالك مباشرة — مثل "الخاص بـ".',
+      examples:[
+        { cn:'我的水', ar:'وُو دِه شُوِي', meaning:'مائي / الماء الخاص بي', audio:'我:wo3,的:de5,水:shui3' },
+        { cn:'你的书', ar:'نِي دِه شُو', meaning:'كتابك', audio:'你:ni3,的:de5,书:shu1' },
+        { cn:'他的家', ar:'تَا دِه جِيَا', meaning:'بيته', audio:'他:ta1,的:de5,家:jia1' }
+      ]
+    },
+    {
+      title:'النفي: 不 مقابل 没',
+      text:'不 لنفي المضارع والرغبات، و没 لنفي الماضي ولنفي 有 (يملك).',
+      examples:[
+        { cn:'我不是人', ar:'وُو بُو شِ ژِن', meaning:'أنا لست إنساناً', audio:'我:wo3,不:bu4,是:shi4,人:ren2' },
+        { cn:'我不去', ar:'وُو بُو چُو', meaning:'لن أذهب', audio:'我:wo3,不:bu4,去:qu4' },
+        { cn:'我没有', ar:'وُو مِي يُو', meaning:'ليس عندي', audio:'我:wo3,没:mei2,有:you3' }
+      ]
+    },
+    {
+      title:'السؤال: 吗 وأدوات الاستفهام',
+      text:'أسهل طريقة: 吗 في نهاية الجملة → سؤال بنعم/لا. أو ضع أداة الاستفهام مكان الكلمة المسؤول عنها.',
+      examples:[
+        { cn:'你好吗', ar:'نِي هَاو مَا', meaning:'هل أنت بخير؟', audio:'你:ni3,好:hao3,吗:ma5' },
+        { cn:'你是谁', ar:'نِي شِ شِي', meaning:'من أنت؟', audio:'你:ni3,是:shi4,谁:shei2' },
+        { cn:'你去哪儿', ar:'نِي چُو نَا عَر', meaning:'إلى أين تذهب؟', audio:'你:ni3,去:qu4,哪:na3,儿:er2' }
+      ]
+    },
+    {
+      title:'أدوات العد (量词)',
+      text:'بين الرقم والاسم، ضع أداة عد حسب نوع الاسم. 个 عامة، 只 للحيوانات والأعضاء، 本 للكتب.',
+      examples:[
+        { cn:'一个人', ar:'يِ گِه ژِن', meaning:'إنسان واحد', audio:'一:yi1,个:ge4,人:ren2' },
+        { cn:'两只手', ar:'لْيَانگ ژِ شُو', meaning:'يدان', audio:'两:liang3,只:zhi1,手:shou3' },
+        { cn:'三本书', ar:'سَان بِين شُو', meaning:'ثلاثة كتب', audio:'三:san1,本:ben3,书:shu1' }
+      ]
+    },
+    {
+      title:'是 (يكون) و 有 (يملك)',
+      text:'是 تربط بين شيئين (أ = ب). 有 تعني "يملك" أو "يوجد". للنفي: 不是 و 没有.',
+      examples:[
+        { cn:'我是学生', ar:'وُو شِ شُوِه شِنگ', meaning:'أنا طالب', audio:'我:wo3,是:shi4,学:xue2,生:sheng1' },
+        { cn:'我有书', ar:'وُو يُو شُو', meaning:'عندي كتاب', audio:'我:wo3,有:you3,书:shu1' },
+        { cn:'他没有', ar:'تَا مِي يُو', meaning:'ليس عنده', audio:'他:ta1,没:mei2,有:you3' }
+      ]
+    },
+    {
+      title:'الصفات لا تحتاج "يكون"',
+      text:'الصفة وحدها تعني "يكون + صفة". نضيف 很 (جداً) قبلها غالباً لأسباب إيقاعية.',
+      examples:[
+        { cn:'我好', ar:'وُو هَاو', meaning:'أنا بخير', audio:'我:wo3,好:hao3' },
+        { cn:'水很冷', ar:'شُوِي هِن لِنگ', meaning:'الماء بارد جداً', audio:'水:shui3,很:hen3,冷:leng3' },
+        { cn:'他很高', ar:'تَا هِن گَاو', meaning:'هو طويل جداً', audio:'他:ta1,很:hen3,高:gao1' }
+      ]
+    },
+    {
+      title:'了: للحدث المكتمل',
+      text:'أضف 了 بعد الفعل (أو نهاية الجملة) للدلالة على اكتمال الحدث. ليست "الماضي" بالضبط، بل "تم".',
+      examples:[
+        { cn:'我喝水了', ar:'وُو هِ شُوِي لِه', meaning:'شربت الماء', audio:'我:wo3,喝:he1,水:shui3,了:le5' },
+        { cn:'他去了', ar:'تَا چُو لِه', meaning:'ذهب / رحل', audio:'他:ta1,去:qu4,了:le5' }
+      ]
+    },
+    {
+      title:'المقارنة بـ 比',
+      text:'التركيب: أ + 比 + ب + صفة = "أ أكثر [صفة] من ب".',
+      examples:[
+        { cn:'我比你大', ar:'وُو بِي نِي دَا', meaning:'أنا أكبر منك', audio:'我:wo3,比:bi3,你:ni3,大:da4' },
+        { cn:'他比我好', ar:'تَا بِي وُو هَاو', meaning:'هو أفضل مني', audio:'他:ta1,比:bi3,我:wo3,好:hao3' }
+      ]
+    }
+  ];
+
+  function el(tag, cls, text){
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  const container = document.getElementById('rules');
+  rules.forEach((rule, i) => {
+    const details = el('details', 'rule');
+    if (i === 0) details.open = true;
+
+    const summary = el('summary', 'rule-header');
+    summary.appendChild(el('span', 'rule-num', String(i + 1)));
+    summary.appendChild(el('span', '', rule.title));
+    details.appendChild(summary);
+
+    const body = el('div', 'rule-body');
+    body.appendChild(el('div', 'rule-text', rule.text));
+
+    rule.examples.forEach(ex => {
+      const wrap = el('div', 'example');
+      const t = el('div', 'example-text');
+      t.appendChild(el('div', 'example-cn', ex.cn));
+      t.appendChild(el('div', 'example-ar', ex.ar));
+      t.appendChild(el('div', 'example-meaning', ex.meaning));
+      wrap.appendChild(t);
+
+      const btn = el('button', 'example-play', '🔊');
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'استمع للمثال: ' + ex.meaning);
+      btn.addEventListener('click', () => playSequence(ex.audio, btn));
+      wrap.appendChild(btn);
+
+      body.appendChild(wrap);
+    });
+
+    details.appendChild(body);
+    container.appendChild(details);
+  });
+})();
+</script>
+  <script src="player-picker.js"></script>
+</body>
+</html>

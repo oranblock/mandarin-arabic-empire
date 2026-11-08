@@ -1,0 +1,523 @@
+{
+  "beijing": {
+    "cityId": "beijing",
+    "nameZh": "北京市",
+    "nameAr": "بكين",
+    "title": "العاصمة الإمبراطورية",
+    "tierRequired": 3,
+    "minEmblems": 12,
+    "coords": [
+      116.4074,
+      39.9042
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "shanghai": {
+    "cityId": "shanghai",
+    "nameZh": "上海市",
+    "nameAr": "شانغهاي",
+    "title": "العاصمة المالية",
+    "tierRequired": 3,
+    "minEmblems": 12,
+    "coords": [
+      121.4737,
+      31.2304
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "guangzhou": {
+    "cityId": "guangzhou",
+    "nameZh": "广州市",
+    "nameAr": "قوانغتشو",
+    "title": "بوابة الجنوب",
+    "tierRequired": 3,
+    "minEmblems": 12,
+    "coords": [
+      113.2644,
+      23.1291
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "shenzhen": {
+    "cityId": "shenzhen",
+    "nameZh": "深圳市",
+    "nameAr": "شنتشن",
+    "title": "وادي التكنولوجيا",
+    "tierRequired": 3,
+    "minEmblems": 12,
+    "coords": [
+      114.0579,
+      22.5431
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "chongqing": {
+    "cityId": "chongqing",
+    "nameZh": "重庆市",
+    "nameAr": "تشونغتشينغ",
+    "title": "حاضرة الجبال",
+    "tierRequired": 3,
+    "minEmblems": 12,
+    "coords": [
+      106.5516,
+      29.563
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "tianjin": {
+    "cityId": "tianjin",
+    "nameZh": "天津市",
+    "nameAr": "تيانجين",
+    "title": "حامية الشمال",
+    "tierRequired": 3,
+    "minEmblems": 12,
+    "coords": [
+      117.2008,
+      39.0842
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "chengdu": {
+    "cityId": "chengdu",
+    "nameZh": "成都市",
+    "nameAr": "تشنغدو",
+    "title": "أرض الباندا وسيتشوان",
+    "tierRequired": 2,
+    "minEmblems": 6,
+    "coords": [
+      104.0665,
+      30.5723
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "wuhan": {
+    "cityId": "wuhan",
+    "nameZh": "武汉市",
+    "nameAr": "ووهان",
+    "title": "ملتقى الأنهار الكبرى",
+    "tierRequired": 2,
+    "minEmblems": 6,
+    "coords": [
+      114.3055,
+      30.5928
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "xian": {
+    "cityId": "xian",
+    "nameZh": "西安市",
+    "nameAr": "شيآن",
+    "title": "بداية طريق الحرير القديم",
+    "tierRequired": 2,
+    "minEmblems": 6,
+    "coords": [
+      108.9398,
+      34.3416
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "hangzhou": {
+    "cityId": "hangzhou",
+    "nameZh": "杭州市",
+    "nameAr": "هانغتشو",
+    "title": "جنة البحيرة الغربية",
+    "tierRequired": 2,
+    "minEmblems": 6,
+    "coords": [
+      120.1551,
+      30.2741
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "nanjing": {
+    "cityId": "nanjing",
+    "nameZh": "南京市",
+    "nameAr": "نانجينغ",
+    "title": "العاصمة الجنوبية العريقة",
+    "tierRequired": 2,
+    "minEmblems": 6,
+    "coords": [
+      118.7969,
+      32.0603
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "changsha": {
+    "cityId": "changsha",
+    "nameZh": "长沙市",
+    "nameAr": "تشانغشا",
+    "title": "قلب هونان النابض",
+    "tierRequired": 2,
+    "minEmblems": 6,
+    "coords": [
+      112.9388,
+      28.2282
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "zhengzhou": {
+    "cityId": "zhengzhou",
+    "nameZh": "郑州市",
+    "nameAr": "تشنغتشو",
+    "title": "مهد النهر الأصفر",
+    "tierRequired": 2,
+    "minEmblems": 6,
+    "coords": [
+      113.6253,
+      34.7466
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "kunming": {
+    "cityId": "kunming",
+    "nameZh": "昆明市",
+    "nameAr": "كونمينغ",
+    "title": "مدينة الربيع الدائم",
+    "tierRequired": 2,
+    "minEmblems": 6,
+    "coords": [
+      102.8329,
+      24.8801
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "suzhou": {
+    "cityId": "suzhou",
+    "nameZh": "苏州市",
+    "nameAr": "سوتشو",
+    "title": "مدينة الحرير والحدائق",
+    "tierRequired": 1,
+    "minEmblems": 1,
+    "coords": [
+      120.5853,
+      31.2989
+    ],
+    "ownerId": "player-1",
+    "ownerName": "الإمبراطور الأول",
+    "ownerAvatar": "🐯",
+    "empireColor": "#27ae60",
+    "challengeScore": 50,
+    "customArabicName": "حاضرة الحرير والحدائق الفيحاء",
+    "namedBy": "الإمبراطور الأول",
+    "claimedAt": 1794110313546,
+    "namedAt": 1794110313551
+  },
+  "qingdao": {
+    "cityId": "qingdao",
+    "nameZh": "青岛市",
+    "nameAr": "تشينغداو",
+    "title": "لؤلؤة البحر الأصفر",
+    "tierRequired": 1,
+    "minEmblems": 1,
+    "coords": [
+      120.3826,
+      36.0671
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "shenyang": {
+    "cityId": "shenyang",
+    "nameZh": "沈阳市",
+    "nameAr": "شنيانغ",
+    "title": "حاضرة منشوريا",
+    "tierRequired": 1,
+    "minEmblems": 1,
+    "coords": [
+      123.4315,
+      41.8057
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "dalian": {
+    "cityId": "dalian",
+    "nameZh": "大连市",
+    "nameAr": "داليان",
+    "title": "ميناء الشمال الرومانسي",
+    "tierRequired": 1,
+    "minEmblems": 1,
+    "coords": [
+      121.6147,
+      38.914
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "xiamen": {
+    "cityId": "xiamen",
+    "nameZh": "厦门市",
+    "nameAr": "شيامن",
+    "title": "جزيرة اللوتس",
+    "tierRequired": 1,
+    "minEmblems": 1,
+    "coords": [
+      118.0894,
+      24.4798
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "fuzhou": {
+    "cityId": "fuzhou",
+    "nameZh": "福州市",
+    "nameAr": "فوتشو",
+    "title": "مدينة شجر البانيان",
+    "tierRequired": 1,
+    "minEmblems": 1,
+    "coords": [
+      119.2965,
+      26.0745
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "harbin": {
+    "cityId": "harbin",
+    "nameZh": "哈尔滨市",
+    "nameAr": "هاربين",
+    "title": "عاصمة الجليد والثلج",
+    "tierRequired": 1,
+    "minEmblems": 1,
+    "coords": [
+      126.535,
+      45.8038
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "guilin": {
+    "cityId": "guilin",
+    "nameZh": "桂林市",
+    "nameAr": "غويلين",
+    "title": "أعجوبة التضاريس الكارستية",
+    "tierRequired": 1,
+    "minEmblems": 1,
+    "coords": [
+      110.2902,
+      25.2736
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "sanya": {
+    "cityId": "sanya",
+    "nameZh": "三亚市",
+    "nameAr": "سانيا",
+    "title": "شواطئ هاينان الاستوائية",
+    "tierRequired": 1,
+    "minEmblems": 1,
+    "coords": [
+      109.5119,
+      18.2528
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "lhasa": {
+    "cityId": "lhasa",
+    "nameZh": "拉萨市",
+    "nameAr": "لاسا",
+    "title": "مدينة الشمس الساطعة",
+    "tierRequired": 1,
+    "minEmblems": 1,
+    "coords": [
+      91.1409,
+      29.6456
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "urumqi": {
+    "cityId": "urumqi",
+    "nameZh": "乌鲁木齐市",
+    "nameAr": "أورومتشي",
+    "title": "حاضرة شينجيانغ",
+    "tierRequired": 1,
+    "minEmblems": 1,
+    "coords": [
+      87.6168,
+      43.8256
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  },
+  "luoyang": {
+    "cityId": "luoyang",
+    "nameZh": "洛阳市",
+    "nameAr": "لويانغ",
+    "title": "عاصمة الفاوانيا التاريخية",
+    "tierRequired": 1,
+    "minEmblems": 1,
+    "coords": [
+      112.454,
+      34.6197
+    ],
+    "ownerId": null,
+    "ownerName": null,
+    "ownerAvatar": null,
+    "empireColor": null,
+    "challengeScore": 50,
+    "customArabicName": null,
+    "namedBy": null,
+    "claimedAt": null
+  }
+}

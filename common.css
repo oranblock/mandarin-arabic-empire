@@ -1,0 +1,270 @@
+/* common.css — مشترك بين كل صفحات تعلم الصينية */
+
+/* ═══ CSS Custom Properties ═══ */
+:root {
+  --bg: #f7f5f0;
+  --card: #ffffff;
+  --line: #e6e0d4;
+  --txt: #2b2b2b;
+  --muted: #8a8375;
+  --accent: #b5622a;
+  --accent-bg: #fff8ef;
+  --accent-dark: #9c4f1e;
+  --t1: #c0392b;
+  --t2: #27ae60;
+  --t3: #2980b9;
+  --t4: #8e44ad;
+  --ok: #27ae60;
+  --ok-bg: #eafaf0;
+  --bad: #c0392b;
+  --bad-bg: #fdeceb;
+  --gold: #d4af37;
+  --silver: #bdc3c7;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 3px 12px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.08);
+  --shadow-accent: 0 8px 24px rgba(181, 98, 42, 0.12);
+  --transition: 0.2s ease;
+  --font-ar: "Noto Naskh Arabic", "Traditional Arabic", "Segoe UI", serif;
+  --font-cn: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", "SimHei", sans-serif;
+}
+
+/* ═══ Reset & Base ═══ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--txt);
+  font-family: var(--font-ar);
+  line-height: 1.7;
+}
+
+/* ═══ Focus styles for accessibility ═══ */
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ═══ Skip link (accessibility) ═══ */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  z-index: 10000;
+  font-weight: 700;
+  text-decoration: none;
+  transition: top var(--transition);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ═══ Shared Layout ═══ */
+.wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.back {
+  display: inline-block;
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  transition: color var(--transition);
+}
+
+.back:hover { color: var(--accent); }
+
+/* ═══ Shared Header ═══ */
+header {
+  text-align: center;
+  border-bottom: 2px solid var(--line);
+  padding-bottom: 20px;
+  margin-bottom: 26px;
+}
+
+header h1 {
+  margin: 0 0 6px;
+  font-size: 1.8rem;
+  color: var(--accent);
+}
+
+header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* ═══ Shared Card Style ═══ */
+.card-base {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  transition: transform var(--transition), box-shadow var(--transition),
+              border-color var(--transition), background var(--transition);
+}
+
+.card-base:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-accent);
+  border-color: var(--accent);
+}
+
+/* ═══ Shared Button Styles ═══ */
+.btn {
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--txt);
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: all 0.18s;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+  color: #fff;
+}
+
+/* ═══ Shared Controls Panel ═══ */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  margin-bottom: 22px;
+}
+
+.controls label {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.controls input[type="range"] {
+  width: 160px;
+  accent-color: var(--accent);
+}
+
+.rate-val {
+  display: inline-block;
+  min-width: 42px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* ═══ Shared Note Box ═══ */
+.note {
+  background: var(--accent-bg);
+  border: 1px dashed var(--accent);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  font-size: 0.9rem;
+}
+
+.note strong { color: var(--accent); }
+
+/* ═══ Shared Footer ═══ */
+footer {
+  text-align: center;
+  margin-top: 36px;
+  padding: 16px 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  border-top: 1px solid var(--line);
+}
+
+/* ═══ Shared Tone Badges ═══ */
+.tone {
+  display: inline-block;
+  font-size: 0.72rem;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  color: #fff;
+}
+
+.t1 { background: var(--t1); }
+.t2 { background: var(--t2); }
+.t3 { background: var(--t3); }
+.t4 { background: var(--t4); }
+
+/* ═══ Shared Pulse Animation ═══ */
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(181, 98, 42, 0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(181, 98, 42, 0.05); }
+}
+
+/* ═══ Reduced Motion ═══ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ═══ Print Styles ═══ */
+@media print {
+  body { background: #fff; }
+  .back, footer, .controls, #pp-fab, #pp-overlay { display: none !important; }
+}
+
+/* ═══ Chinese Character Font ═══ */
+.cn-char {
+  font-family: var(--font-cn);
+}
+
+/* ═══ Visually Hidden (accessibility) ═══ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

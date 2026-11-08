@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="تعلم الصينية بالعربية — منصة شاملة لتعلم النطق والكتابة والقواعد واختبارات تفاعلية بدون لغة وسيطة">
+<title>تعلم الصينية — بالعربية</title>
+<link rel="stylesheet" href="common.css">
+<style>
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:#f7f5f0; color:#2b2b2b;
+    font-family:"Noto Naskh Arabic","Traditional Arabic","Segoe UI",serif;
+    padding:40px 20px;
+  }
+  .container{max-width:960px; width:100%; text-align:center}
+
+  h1{color:#b5622a; font-size:2.2rem; margin:0 0 8px}
+  .sub{color:#8a8375; margin:0 0 44px; font-size:1rem}
+
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:22px;
+  }
+  .card{
+    display:block; background:#fff;
+    border:1px solid #e6e0d4; border-radius:20px;
+    padding:34px 22px; text-decoration:none; color:inherit;
+    transition:transform .2s, box-shadow .2s, border-color .2s, background .2s;
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    border-color:#b5622a;
+    background:#fff8ef;
+    box-shadow:0 14px 30px rgba(181,98,42,.12);
+  }
+  .icon{font-size:3.4rem; line-height:1}
+  h2{margin:12px 0 6px; font-size:1.5rem; color:#b5622a}
+  .card p{margin:0; color:#8a8375; font-size:.95rem; line-height:1.6}
+
+  footer{margin-top:44px; color:#8a8375; font-size:.85rem}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
+
+<main id="main-content" class="container">
+  <h1>تعلم الصينية</h1>
+  <p class="sub">صوت + كتابة + قواعد — بالعربية فقط، بدون لغة وسيطة</p>
+
+  <nav role="navigation" aria-label="الأقسام الرئيسية" class="cards">
+    <a href="audio.html" class="card" aria-label="النطق — استمع للنطق الأصلي">
+      <div class="icon" aria-hidden="true">🎧</div>
+      <h2>النطق</h2>
+      <p>استمع للنطق الأصلي</p>
+    </a>
+    <a href="writing.html" class="card" aria-label="الكتابة — ترتيب الخطوط والمكونات">
+      <div class="icon" aria-hidden="true">✍️</div>
+      <h2>الكتابة</h2>
+      <p>ترتيب الخطوط والمكونات</p>
+    </a>
+    <a href="grammar.html" class="card" aria-label="القواعد — قواعد أساسية مشروحة">
+      <div class="icon" aria-hidden="true">📖</div>
+      <h2>القواعد</h2>
+      <p>قواعد أساسية مشروحة</p>
+    </a>
+    <a href="tests.html" class="card" aria-label="الاختبارات — اختبر نفسك">
+      <div class="icon" aria-hidden="true">🎯</div>
+      <h2>الاختبارات</h2>
+      <p>اختبر نفسك</p>
+    </a>
+    <a href="daily.html" class="card" aria-label="التحدي اليومي — املاء الفراغ ورادار الأخبار الحية">
+      <div class="icon" aria-hidden="true">🔥</div>
+      <h2>التحدي اليومي</h2>
+      <p>املاء الفراغ ورادار الأخبار الحية</p>
+    </a>
+    <a href="map.html" class="card" aria-label="خريطة المدن — امتلاك وتسمية المدن بنقاطك وأوسمتك">
+      <div class="icon" aria-hidden="true">🗺️</div>
+      <h2>خريطة المدن</h2>
+      <p>امتلاك وتسمية المدن بالعملات والأوسمة</p>
+    </a>
+    <a href="dashboard.html" class="card" aria-label="لوحة التقدم — الإنجازات والمنافسة">
+      <div class="icon" aria-hidden="true">🏆</div>
+      <h2>لوحة التقدم</h2>
+      <p>الإنجازات والمنافسة</p>
+    </a>
+  </nav>
+
+  <aside class="hsk-mini-banner" id="hsk-mini-banner" style="margin-top:32px; background:#fff; border:1px solid #e6e0d4; border-radius:18px; padding:16px 22px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;" aria-label="ملخص التقدم في سلم HSK">
+    <div style="text-align:right">
+      <div style="font-weight:700; color:#b5622a; font-size:1.05rem">🧗‍♂️ سلّم HSK نحو الطلاقة: <span id="mini-chars">36</span> حرفاً</div>
+      <div style="font-size:.88rem; color:#8a8375" id="mini-stats">21% من الدرجة الأولى (174) · 1% من قمة السلّم (3,500+)</div>
+    </div>
+    <a href="dashboard.html" class="btn btn-primary" style="padding:7px 18px; border-radius:999px; text-decoration:none; font-weight:700; font-size:.88rem">عرض السلّم الكامل ←</a>
+  </aside>
+
+  <footer>تعلم الصينية — بالعربية فقط، بدون لغة وسيطة</footer>
+</main>
+
+<script src="progress.js"></script>
+<script>
+  if (window.CNProgress) {
+    const l = CNProgress.getLadderProgress();
+    const cEl = document.getElementById('mini-chars');
+    const sEl = document.getElementById('mini-stats');
+    if (cEl) cEl.textContent = l.count;
+    if (sEl) sEl.textContent = `${l.pctHSK1}% من الدرجة الأولى (174) · ${l.pctFluency}% من قمة السلّم (3,500+)`;
+  }
+</script>
+<script src="player-picker.js"></script>
+</body>
+</html>

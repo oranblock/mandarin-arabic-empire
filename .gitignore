@@ -1,0 +1,14 @@
+# Temporary and backup files
+*.bak*
+*.tmp
+*.log
+.DS_Store
+
+# Server session tokens (keep profiles and cities)
+server-data/sessions.json
+
+# Node modules
+node_modules/
+
+# Cloudflare runtime
+.cloudflared/

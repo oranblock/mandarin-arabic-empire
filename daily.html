@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="التحديات اليومية لتعلم الصينية — املاء الفراغ بالجمل، رادار الأخبار الحية 60s، والنطق الذكي TTS">
+<title>التحدي اليومي والأخبار — تعلم الصينية</title>
+<link rel="stylesheet" href="common.css">
+<script src="progress.js"></script>
+<style>
+  :root{
+    --bg:#f7f5f0; --card:#ffffff; --line:#e6e0d4;
+    --txt:#2b2b2b; --muted:#8a8375; --accent:#b5622a; --accent-bg:#fff8ef;
+    --gold:#d4af37; --silver:#bdc3c7;
+    --ok:#27ae60; --ok-bg:#eafaf0; --bad:#c0392b; --bad-bg:#fdeceb;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:20px 16px 60px; background:var(--bg); color:var(--txt);
+    font-family:"Noto Naskh Arabic","Traditional Arabic","Segoe UI",serif;
+    line-height:1.7;
+  }
+  .wrap{max-width:960px; margin:0 auto}
+  .back{display:inline-block; color:var(--muted); text-decoration:none; margin-bottom:12px; font-size:.92rem; transition:color .2s}
+  .back:hover{color:var(--accent)}
+
+  header{
+    text-align:center; border-bottom:2px solid var(--line);
+    padding-bottom:18px; margin-bottom:22px;
+  }
+  h1{margin:0 0 6px; font-size:1.9rem; color:var(--accent)}
+  header p{margin:0; color:var(--muted); font-size:.95rem}
+
+  /* راية حالة التحدي اليومي */
+  .daily-banner{
+    background:linear-gradient(135deg, #fff8ef 0%, #fff 100%);
+    border:2px solid var(--accent); border-radius:20px;
+    padding:18px 24px; margin-bottom:22px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:16px; box-shadow:0 6px 20px rgba(181,98,42,.08);
+  }
+  .daily-status{display:flex; align-items:center; gap:14px}
+  .daily-icon{font-size:3rem; line-height:1}
+  .daily-title{margin:0 0 4px; font-size:1.2rem; color:var(--accent); font-weight:700}
+  .daily-sub{color:var(--muted); font-size:.88rem; margin:0}
+  .daily-metrics{display:flex; gap:14px; align-items:center; flex-wrap:wrap}
+  .daily-pill{
+    background:#fff; border:1px solid var(--line); border-radius:999px;
+    padding:6px 16px; font-weight:700; font-size:.9rem; color:var(--txt);
+    display:flex; align-items:center; gap:6px;
+  }
+  .daily-pill.active{border-color:var(--gold); background:#fffdf5; color:#997300}
+
+  /* تبويبات التحديات */
+  .nav-tabs{
+    display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap; justify-content:center;
+  }
+  .tab-btn{
+    background:var(--card); border:2px solid var(--line); border-radius:14px;
+    padding:10px 20px; cursor:pointer; font-family:inherit; font-size:.95rem;
+    font-weight:700; color:var(--muted); transition:all .2s;
+    display:flex; align-items:center; gap:8px;
+  }
+  .tab-btn:hover{border-color:var(--accent); color:var(--accent)}
+  .tab-btn.active{
+    border-color:var(--accent); background:var(--accent-bg); color:var(--accent);
+    box-shadow:0 4px 14px rgba(181,98,42,.12);
+  }
+
+  /* لوحة املاء الفراغ */
+  .quiz-box{
+    background:var(--card); border:1px solid var(--line); border-radius:22px;
+    padding:28px 22px; margin-bottom:24px; text-align:center;
+    box-shadow:0 6px 20px rgba(0,0,0,.04);
+  }
+  .sentence-cn{
+    font-family:"Noto Sans SC","Microsoft YaHei","SimHei",sans-serif;
+    font-size:2.4rem; line-height:1.4; color:var(--txt); margin:14px 0;
+    direction:ltr; unicode-bidi:isolate;
+  }
+  .blank-space{
+    display:inline-block; min-width:80px; padding:2px 14px; margin:0 6px;
+    border-bottom:4px dashed var(--accent); color:var(--accent); font-weight:700;
+    transition:all .25s;
+  }
+  .blank-space.filled{
+    border-bottom:4px solid var(--ok); color:var(--ok);
+  }
+  .sentence-ar{
+    font-size:1.15rem; color:var(--muted); margin-bottom:16px;
+  }
+  .sentence-actions{
+    display:flex; justify-content:center; gap:12px; margin-bottom:22px; flex-wrap:wrap;
+  }
+  .tts-btn{
+    background:var(--accent-bg); border:1px solid var(--accent); color:var(--accent);
+    padding:8px 20px; border-radius:999px; cursor:pointer; font-family:inherit;
+    font-size:.92rem; font-weight:700; display:inline-flex; align-items:center; gap:8px;
+    transition:all .2s;
+  }
+  .tts-btn:hover{background:var(--accent); color:#fff}
+
+  /* خيارات الإجابة */
+  .options-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    gap:14px; margin-bottom:20px;
+  }
+  .option-card{
+    background:var(--card); border:2px solid var(--line); border-radius:16px;
+    padding:16px 14px; cursor:pointer; font-family:inherit; text-align:center;
+    transition:all .18s;
+  }
+  .option-card:hover:not(:disabled){
+    border-color:var(--accent); background:var(--accent-bg); transform:translateY(-3px);
+  }
+  .option-card:disabled{cursor:default}
+  .option-card.correct{border-color:var(--ok); background:var(--ok-bg); color:var(--ok); font-weight:700}
+  .option-card.wrong{border-color:var(--bad); background:var(--bad-bg); color:var(--bad)}
+  .opt-char{
+    font-family:"Noto Sans SC","Microsoft YaHei","SimHei",sans-serif;
+    font-size:2.2rem; line-height:1; color:inherit; margin-bottom:4px;
+  }
+  .opt-pinyin{font-size:.9rem; color:var(--accent); font-weight:700}
+  .opt-meaning{font-size:.82rem; color:var(--muted)}
+
+  /* رادار أخبار 60s */
+  .quote-card{
+    background:linear-gradient(135deg, #fffdf8, #fff8ef);
+    border:2px dashed var(--accent); border-radius:18px;
+    padding:20px 22px; margin-bottom:24px; text-align:right;
+  }
+  .quote-title{color:var(--accent); font-weight:700; font-size:1.05rem; margin-bottom:6px; display:flex; align-items:center; gap:8px}
+  .quote-cn{
+    font-family:"Noto Sans SC","Microsoft YaHei","SimHei",sans-serif;
+    font-size:1.4rem; color:var(--txt); margin-bottom:8px; line-height:1.6;
+    direction:ltr; text-align:left;
+  }
+  .news-grid{
+    display:grid; grid-template-columns:1fr; gap:14px;
+  }
+  .news-item{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:18px 20px; transition:all .2s;
+  }
+  .news-item:hover{border-color:var(--accent); box-shadow:0 6px 18px rgba(0,0,0,.05)}
+  .news-header{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:8px; font-size:.82rem; color:var(--muted);
+  }
+  .news-tag{
+    background:var(--accent-bg); color:var(--accent); padding:2px 10px;
+    border-radius:999px; font-weight:700; font-size:.78rem;
+  }
+  .news-content{
+    font-family:"Noto Sans SC","Microsoft YaHei","SimHei",sans-serif;
+    font-size:1.25rem; line-height:1.6; color:var(--txt); margin-bottom:12px;
+    direction:ltr; text-align:left;
+  }
+  .news-actions{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  }
+
+  /* إعدادات السرعة والصوت */
+  .speed-bar{
+    display:inline-flex; align-items:center; gap:8px; font-size:.85rem; color:var(--muted);
+  }
+  .speed-bar input{width:90px; accent-color:var(--accent)}
+
+  .hidden{display:none !important}
+  footer{text-align:center; margin-top:40px; color:var(--muted); font-size:.82rem}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
+
+<main class="wrap" id="main-content">
+  <a href="index.html" class="back">← الرئيسية</a>
+
+  <header>
+    <h1>🔥 التحديات اليومية ورادار الأخبار</h1>
+    <p>املاء الفراغات في الجمل، استمع بنطق TTS الذكي، وتدرب على الأخبار اليومية الحقيقية</p>
+  </header>
+
+  <!-- راية حالة التحدي اليومي -->
+  <section class="daily-banner" id="daily-banner" role="region" aria-label="حالة التحدي اليومي">
+    <div class="daily-status">
+      <div class="daily-icon" aria-hidden="true">⭐</div>
+      <div>
+        <h2 class="daily-title" id="banner-title">تحدي اليوم بانتظارك!</h2>
+        <p class="daily-sub" id="banner-date">تاريخ اليوم: جاري التحميل...</p>
+      </div>
+    </div>
+    <div class="daily-metrics">
+      <div class="daily-pill active" id="pill-streak">🔥 السلسلة: <b id="streak-val">0</b> أيام</div>
+      <div class="daily-pill" id="pill-xp">💎 المكافأة: <b>+50 XP</b></div>
+    </div>
+  </section>
+
+  <!-- تبويبات الأوضاع -->
+  <nav class="nav-tabs" role="tablist" aria-label="أوضاع التحدي اليومي">
+    <button class="tab-btn active" data-tab="blank" role="tab" aria-selected="true">
+      🎯 املاء الفراغ في الجملة
+    </button>
+    <button class="tab-btn" data-tab="news" role="tab" aria-selected="false">
+      📰 رادار الأخبار والمقتطفات (60s API)
+    </button>
+    <button class="tab-btn" data-tab="random" role="tab" aria-selected="false">
+      🎲 مسبار الكلمات العشوائية
+    </button>
+  </nav>
+
+  <!-- ═══ الوضع 1: املاء الفراغ في الجمل ═══ -->
+  <section id="pane-blank" role="tabpanel" aria-label="املاء الفراغ في الجملة">
+    <div class="quiz-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; font-size:.9rem; color:var(--muted); margin-bottom:12px">
+        <span>السؤال <b id="b-index">1</b> / <b id="b-total">5</b></span>
+        <span>النتيجة اليومية: <b id="b-score">0</b></span>
+      </div>
+
+      <div class="sentence-cn" id="b-sentence">
+        我 <span class="blank-space" id="b-space">___</span> 中文
+      </div>
+      <div class="sentence-ar" id="b-meaning">أنا [فراغ] الصينية</div>
+
+      <div class="sentence-actions">
+        <button class="tts-btn" id="btn-speak-sentence">
+          🔊 استمع للجملة كاملة (TTS)
+        </button>
+        <span class="speed-bar">
+          السرعة:
+          <input type="range" id="tts-rate" min="0.6" max="1.3" step="0.1" value="0.9" aria-label="سرعة النطق">
+          <b id="tts-rate-val">0.9×</b>
+        </span>
+      </div>
+
+      <div class="options-grid" id="b-options"></div>
+
+      <div id="b-feedback" style="min-height:36px; font-weight:700; margin-bottom:14px; font-size:1.05rem;" aria-live="polite"></div>
+
+      <button class="btn btn-primary hidden" id="b-btn-next">السؤال التالي ←</button>
+    </div>
+  </section>
+
+  <!-- ═══ الوضع 2: رادار أخبار 60s والمقتطفات ═══ -->
+  <section id="pane-news" class="hidden" role="tabpanel" aria-label="رادار الأخبار الصينية">
+    <!-- حكمة اليوم -->
+    <div class="quote-card" id="quote-card">
+      <div class="quote-title">💡 مقتطف وحكمة اليوم (Daily Quote)</div>
+      <div class="quote-cn" id="quote-text">允许自己偶尔放慢脚步，接纳不完美，持续成长就是最耀眼的进步</div>
+      <div style="font-size:.92rem; color:var(--muted); margin-bottom:12px" id="quote-meaning">
+        «اسمح لنفسك أحياناً بتمهيل الخطى، وتقبّل النواقص، فالاستمرار في النمو هو أرقى أشكال التقدم.»
+      </div>
+      <button class="tts-btn" id="btn-speak-quote">🔊 استمع للحكمة (TTS نطق صيني أصلي)</button>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin:24px 0 14px">
+      <h2 style="font-size:1.2rem; color:var(--accent); margin:0">📰 موجز الأخبار الصينية اليومية (60s News)</h2>
+      <button class="btn" id="btn-refresh-news" style="padding:6px 14px; font-size:.85rem">↺ تحديث الأخبار</button>
+    </div>
+
+    <div class="news-grid" id="news-grid">
+      <div style="text-align:center; padding:30px; color:var(--muted)">جاري جلب موجز الأخبار الحي...</div>
+    </div>
+  </section>
+
+  <!-- ═══ الوضع 3: مسبار الكلمات العشوائية ═══ -->
+  <section id="pane-random" class="hidden" role="tabpanel" aria-label="مسبار الكلمات العشوائية">
+    <div class="quiz-box">
+      <h2 style="font-size:1.3rem; color:var(--accent); margin:0 0 8px">🎲 تحدي الكلمات العشوائية</h2>
+      <p style="color:var(--muted); font-size:.9rem; margin-bottom:20px">اختبر حفظك وسرعة بديهتك مع كلمات منتقاة عشوائياً من مستويات HSK</p>
+
+      <div style="font-family:'Noto Sans SC',sans-serif; font-size:4.8rem; line-height:1; color:var(--accent); margin-bottom:14px" id="rand-char">
+        学
+      </div>
+      <div style="margin-bottom:16px">
+        <button class="tts-btn" id="btn-speak-rand">🔊 استمع لنطق الكلمة</button>
+      </div>
+
+      <div class="options-grid" id="rand-options"></div>
+
+      <div id="rand-feedback" style="min-height:36px; font-weight:700; margin-bottom:14px; font-size:1.05rem;" aria-live="polite"></div>
+
+      <button class="btn btn-primary" id="btn-next-rand">كلمة عشوائية أخرى ↺</button>
+    </div>
+  </section>
+
+  <footer>التحديات اليومية — متصلة بنظام النقاط وسلّم HSK للتقدم</footer>
+</main>
+
+<script>
+(function(){
+  // ═══ بنك جمل املاء الفراغ HSK 1 & 2 ═══
+  const BLANK_PUZZLES = [
+    {
+      full: '我学中文',
+      prefix: '我 ',
+      suffix: ' 中文',
+      meaning: 'أنا [فراغ] الصينية',
+      correct: '学',
+      distractors: ['水', '火', '大'],
+      pinyin: 'xué',
+      arGloss: 'يتعلم / يدرس',
+      explanation: '学 تعني يتعلم أو يدرس (我学中文 = أنا أتعلم الصينية).'
+    },
+    {
+      full: '你喝水吗',
+      prefix: '你 ',
+      suffix: ' 水吗？',
+      meaning: 'هل [فراغ] ماءً؟',
+      correct: '喝',
+      distractors: ['吃', '看', '去'],
+      pinyin: 'hē',
+      arGloss: 'تشرب',
+      explanation: '喝 تعني يشرب، تأتي دائماً مع السوائل مثل 水 (ماء) و 茶 (شاي).'
+    },
+    {
+      full: '他是我的老师',
+      prefix: '他 ',
+      suffix: ' 我的老师',
+      meaning: 'هو [فراغ] أستاذي',
+      correct: '是',
+      distractors: ['不', '有', '来'],
+      pinyin: 'shì',
+      arGloss: 'يكون',
+      explanation: '是 رابطة كينونة تعني (يكون) مثل verb to be: هو أستاذي.'
+    },
+    {
+      full: '我有一本书',
+      prefix: '我有一本 ',
+      suffix: '',
+      meaning: 'عندي [فراغ] واحد',
+      correct: '书',
+      distractors: ['车', '门', '马'],
+      pinyin: 'shū',
+      arGloss: 'كتاب',
+      explanation: '本 هي أداة العد الخاصة بالكتب والمجلدات (一本书 = كتاب واحد).'
+    },
+    {
+      full: '我们去学校',
+      prefix: '我们 ',
+      suffix: ' 学校',
+      meaning: 'نحن [فراغ] إلى المدرسة',
+      correct: '去',
+      distractors: ['来', '在', '听'],
+      pinyin: 'qù',
+      arGloss: 'نذهب',
+      explanation: '去 تعني يذهب إلى المكان (去学校 = يذهب إلى المدرسة).'
+    },
+    {
+      full: '今天天气很好',
+      prefix: '今天天气 ',
+      suffix: ' 好',
+      meaning: 'الطقس اليوم جميل [فراغ]',
+      correct: '很',
+      distractors: ['也', '都', '不'],
+      pinyin: 'hěn',
+      arGloss: 'جداً',
+      explanation: '很 توضع قبل الصفات في الصينية للربط والإيقاع وتعني جداً.'
+    },
+    {
+      full: '我不吃肉',
+      prefix: '我 ',
+      suffix: ' 吃肉',
+      meaning: 'أنا [فراغ] آكل اللحم',
+      correct: '不',
+      distractors: ['没', '有', '在'],
+      pinyin: 'bù',
+      arGloss: 'لا / نفي الفعل الحاضر',
+      explanation: '不 أداة النفي القياسية للحاضر والرغبات (不吃 = لا آكل).'
+    },
+    {
+      full: '你在哪里',
+      prefix: '你在 ',
+      suffix: ' 里？',
+      meaning: 'أنت في [فراغ]؟ (أين أنت)',
+      correct: '哪',
+      distractors: ['那', '这', '谁'],
+      pinyin: 'nǎ',
+      arGloss: 'أي / أين',
+      explanation: '哪里 تعني (أين) في الاستفهام الصيني.'
+    }
+  ];
+
+  // بيانات الأخبار الاحتياطية أوفلاين في حال انقطاع الشبكة
+  const OFFLINE_NEWS = [
+    { title: '北京河北等地迎来大范围降雪，气温骤降', tag: 'طقس' },
+    { title: '中国新能源汽车产销量双双突破千万辆大关', tag: 'اقتصاد' },
+    { title: '神舟飞船成功发射，航天员乘组顺利入驻空间站', tag: 'علوم' },
+    { title: '全国各大高校全面启动春季汉语水平考试', tag: 'تعليم' },
+    { title: '国家图书馆推出古籍数字化展览，向公众免费开放', tag: 'ثقافة' }
+  ];
+
+  let currentPuzzleIndex = 0;
+  let dailyScore = 0;
+  let ttsRate = 0.9;
+  let currentNewsItems = [];
+
+  // ═══ مساعد النطق TTS الصوتي ═══
+  function speak(text) {
+    if (window.CNProgress && CNProgress.speakChinese) {
+      CNProgress.speakChinese(text, ttsRate);
+    } else if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-CN';
+      u.rate = ttsRate;
+      window.speechSynthesis.speak(u);
+    }
+  }
+
+  // ═══ تحديث التاريخ والراية اليومية ═══
+  function updateDailyBanner(){
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('ar-EG', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    const cnDateStr = now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日';
+    document.getElementById('banner-date').textContent = `${dateStr} (${cnDateStr})`;
+
+    if (window.CNProgress) {
+      const p = CNProgress.getProfile();
+      const streak = (p.stats && p.stats.dailyStreak) || 0;
+      document.getElementById('streak-val').textContent = streak;
+
+      const todayStr = now.toISOString().slice(0, 10);
+      if (p.stats && p.stats.lastDailyDate === todayStr) {
+        document.getElementById('banner-title').textContent = '✅ أنجزت تحدي اليوم! رائع جداً';
+        document.getElementById('pill-xp').innerHTML = '⭐ تم حصد <b>+50 XP</b>';
+      }
+    }
+  }
+
+  // ═══ إدارة التبويبات ═══
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+
+      const tab = btn.dataset.tab;
+      document.getElementById('pane-blank').classList.toggle('hidden', tab !== 'blank');
+      document.getElementById('pane-news').classList.toggle('hidden', tab !== 'news');
+      document.getElementById('pane-random').classList.toggle('hidden', tab !== 'random');
+
+      if (tab === 'news' && currentNewsItems.length === 0) {
+        fetchNews();
+      }
+      if (tab === 'random') {
+        renderRandomWord();
+      }
+    });
+  });
+
+  // ═══ تشغيل وضع املاء الفراغ ═══
+  function renderBlankPuzzle(){
+    const pz = BLANK_PUZZLES[currentPuzzleIndex % BLANK_PUZZLES.length];
+    document.getElementById('b-index').textContent = (currentPuzzleIndex % 5) + 1;
+    document.getElementById('b-total').textContent = '5';
+    document.getElementById('b-score').textContent = dailyScore;
+
+    document.getElementById('b-sentence').innerHTML = `${pz.prefix}<span class="blank-space" id="b-space">___</span>${pz.suffix}`;
+    document.getElementById('b-meaning').textContent = pz.meaning;
+    document.getElementById('b-feedback').textContent = '';
+    document.getElementById('b-btn-next').classList.add('hidden');
+
+    // خيارات الإجابة
+    const options = [pz.correct, ...pz.distractors].sort(() => Math.random() - 0.5);
+    const box = document.getElementById('b-options');
+    box.innerHTML = '';
+
+    options.forEach(char => {
+      const btn = document.createElement('button');
+      btn.className = 'option-card';
+      const isCorrect = char === pz.correct;
+      btn.innerHTML = `
+        <div class="opt-char">${char}</div>
+        <div class="opt-pinyin">${isCorrect ? pz.pinyin : ''}</div>
+        <div class="opt-meaning">${isCorrect ? pz.arGloss : 'خيار بديل'}</div>
+      `;
+      btn.addEventListener('click', () => handleBlankAnswer(btn, isCorrect, pz));
+      box.appendChild(btn);
+    });
+
+    document.getElementById('btn-speak-sentence').onclick = () => speak(pz.full);
+  }
+
+  function handleBlankAnswer(btn, isCorrect, pz){
+    document.querySelectorAll('#b-options .option-card').forEach(b => b.disabled = true);
+    const space = document.getElementById('b-space');
+    const fb = document.getElementById('b-feedback');
+
+    if (isCorrect) {
+      btn.classList.add('correct');
+      space.textContent = pz.correct;
+      space.classList.add('filled');
+      dailyScore++;
+      document.getElementById('b-score').textContent = dailyScore;
+      fb.style.color = 'var(--ok)';
+      fb.textContent = `✅ ممتاز! ${pz.explanation}`;
+      speak(pz.full);
+
+      if (window.CNProgress) {
+        CNProgress.addXP(10);
+        CNProgress.recordActivity('test', { correct: 1, total: 1, char: pz.correct });
+      }
+    } else {
+      btn.classList.add('wrong');
+      space.textContent = pz.correct;
+      space.classList.add('filled');
+      fb.style.color = 'var(--bad)';
+      fb.textContent = `❌ الصحيح هو: ${pz.correct} (${pz.pinyin} — ${pz.arGloss}). ${pz.explanation}`;
+      speak(pz.full);
+    }
+
+    document.getElementById('b-btn-next').classList.remove('hidden');
+  }
+
+  document.getElementById('b-btn-next').addEventListener('click', () => {
+    currentPuzzleIndex++;
+    if (currentPuzzleIndex % 5 === 0) {
+      // إكمال جولة اليوم الخماسية
+      if (window.CNProgress) {
+        CNProgress.addXP(CNProgress.XP_REWARDS.dailyFirst || 25);
+        CNProgress.recordActivity('daily', { score: dailyScore, total: 5 });
+        const newly = CNProgress.checkAchievements();
+        if (newly.length) {
+          alert('🏆 إنجاز يومي جديد: ' + newly.map(a => a.name).join('، '));
+        }
+      }
+      updateDailyBanner();
+      alert(`🎉 أنهيت تحدي اليوم! نتيجتك: ${dailyScore}/5. حصلت على مكافأة اليوم وسلسلتك مستمرة!`);
+    }
+    renderBlankPuzzle();
+  });
+
+  // ═══ رادار أخبار 60s الصينية الحية ═══
+  async function fetchNews(){
+    const grid = document.getElementById('news-grid');
+    grid.innerHTML = '<div style="text-align:center; padding:30px; color:var(--muted)">🌐 جاري الاتصال برادار الأخبار 60s الحي...</div>';
+
+    try {
+      const resp = await fetch('https://60s.viki.moe/v2/60s', { cache: 'no-cache' });
+      if (!resp.ok) throw new Error('Network response not ok');
+      const data = await resp.json();
+      const news = data.data && data.data.news ? data.data.news : [];
+      const tip = data.data && data.data.tip ? data.data.tip : null;
+
+      if (tip) {
+        document.getElementById('quote-text').textContent = tip;
+      }
+      renderNewsList(news.length ? news.map(n => ({ title: n, tag: 'خبر حي' })) : OFFLINE_NEWS);
+    } catch(err) {
+      console.warn('Using offline news fallback:', err);
+      renderNewsList(OFFLINE_NEWS);
+    }
+  }
+
+  function renderNewsList(items){
+    currentNewsItems = items;
+    const grid = document.getElementById('news-grid');
+    grid.innerHTML = items.map((item, idx) => `
+      <article class="news-item">
+        <div class="news-header">
+          <span class="news-tag">${item.tag || 'أخبار'}</span>
+          <span>خبر #${idx + 1}</span>
+        </div>
+        <div class="news-content" id="news-text-${idx}">${escapeHTML(item.title)}</div>
+        <div class="news-actions">
+          <button class="tts-btn" onclick="window.speakNews(${idx})">🔊 استمع للعنوان (TTS)</button>
+          <button class="btn" style="padding:6px 14px; font-size:.82rem" onclick="window.quizFromNews(${idx})">🎯 تحدي هذا الخبر</button>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  window.speakNews = function(idx){
+    if (currentNewsItems[idx]) {
+      speak(currentNewsItems[idx].title);
+      if (window.CNProgress) {
+        CNProgress.addXP(2);
+        CNProgress.recordActivity('audio', {});
+      }
+    }
+  };
+
+  window.quizFromNews = function(idx){
+    const item = currentNewsItems[idx];
+    if (!item) return;
+    const txt = item.title;
+    // استخراج حرف في منتصف العنوان لصنع فراغ
+    const midIdx = Math.floor(txt.length / 2);
+    const targetChar = txt[midIdx];
+    const prefix = txt.slice(0, midIdx);
+    const suffix = txt.slice(midIdx + 1);
+
+    // التحويل إلى نافذة املاء الفراغ
+    document.querySelector('.tab-btn[data-tab="blank"]').click();
+    document.getElementById('b-sentence').innerHTML = `${escapeHTML(prefix)}<span class="blank-space" id="b-space">___</span>${escapeHTML(suffix)}`;
+    document.getElementById('b-meaning').textContent = 'خمّن الحرف المناسب لهذا الخبر الصيني الواقعي!';
+
+    const options = [targetChar, '人', '水', '大'].sort(() => Math.random() - 0.5);
+    const box = document.getElementById('b-options');
+    box.innerHTML = '';
+    options.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'option-card';
+      btn.innerHTML = `<div class="opt-char">${c}</div>`;
+      btn.addEventListener('click', () => {
+        handleBlankAnswer(btn, c === targetChar, {
+          correct: targetChar,
+          full: txt,
+          pinyin: '',
+          arGloss: 'حرف من سياق الخبر',
+          explanation: 'تم جلب هذه الجملة من أخبار اليوم الحية.'
+        });
+      });
+      box.appendChild(btn);
+    });
+    document.getElementById('btn-speak-sentence').onclick = () => speak(txt);
+  };
+
+  document.getElementById('btn-speak-quote').addEventListener('click', () => {
+    speak(document.getElementById('quote-text').textContent);
+  });
+  document.getElementById('btn-refresh-news').addEventListener('click', fetchNews);
+
+  // ═══ مسبار الكلمات العشوائية ═══
+  const RAND_POOL = [
+    { char:'学', sound:'شُوِه', pinyin:'xué', meaning:'يتعلم' },
+    { char:'生', sound:'شِنگ', pinyin:'shēng', meaning:'طالب / مولود' },
+    { char:'书', sound:'شُو', pinyin:'shū', meaning:'كتاب' },
+    { char:'吃', sound:'چِ', pinyin:'chī', meaning:'يأكل' },
+    { char:'喝', sound:'هِ', pinyin:'hē', meaning:'يشرب' },
+    { char:'看', sound:'كَان', pinyin:'kàn', meaning:'يرى / يقرأ' },
+    { char:'听', sound:'تِينگ', pinyin:'tīng', meaning:'يستمع' },
+    { char:'说', sound:'شُوُو', pinyin:'shuō', meaning:'يتكلم' },
+    { char:'马', sound:'مَـا', pinyin:'mǎ', meaning:'حصان' },
+    { char:'鱼', sound:'يُو', pinyin:'yú', meaning:'سمك' },
+    { char:'车', sound:'چِ', pinyin:'chē', meaning:'عربة / سيارة' },
+    { char:'电', sound:'دْيَان', pinyin:'diàn', meaning:'كهرباء' }
+  ];
+
+  let currentRand = null;
+  function renderRandomWord(){
+    currentRand = RAND_POOL[Math.floor(Math.random() * RAND_POOL.length)];
+    document.getElementById('rand-char').textContent = currentRand.char;
+    document.getElementById('rand-feedback').textContent = '';
+
+    const distractors = RAND_POOL.filter(x => x.char !== currentRand.char).sort(() => Math.random() - 0.5).slice(0, 3);
+    const opts = [currentRand, ...distractors].sort(() => Math.random() - 0.5);
+
+    const box = document.getElementById('rand-options');
+    box.innerHTML = '';
+    opts.forEach(item => {
+      const btn = document.createElement('button');
+      btn.className = 'option-card';
+      btn.innerHTML = `<div class="opt-meaning" style="font-size:1.1rem; font-weight:700; color:var(--txt)">${item.meaning}</div><div class="opt-pinyin">${item.pinyin}</div>`;
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#rand-options .option-card').forEach(b => b.disabled = true);
+        const fb = document.getElementById('rand-feedback');
+        if (item.char === currentRand.char) {
+          btn.classList.add('correct');
+          fb.style.color = 'var(--ok)';
+          fb.textContent = `✅ إجابة صحيحة! ${currentRand.char} تعني ${currentRand.meaning}.`;
+          speak(currentRand.char);
+          if (window.CNProgress) {
+            CNProgress.addXP(10);
+            CNProgress.recordActivity('test', { correct: 1, total: 1, char: currentRand.char });
+          }
+        } else {
+          btn.classList.add('wrong');
+          fb.style.color = 'var(--bad)';
+          fb.textContent = `❌ خطأ، الصحيح هو: ${currentRand.meaning} (${currentRand.pinyin}).`;
+          speak(currentRand.char);
+        }
+      });
+      box.appendChild(btn);
+    });
+  }
+
+  document.getElementById('btn-speak-rand').addEventListener('click', () => {
+    if (currentRand) speak(currentRand.char);
+  });
+  document.getElementById('btn-next-rand').addEventListener('click', renderRandomWord);
+
+  // ═══ عنصر تحكم سرعة TTS ═══
+  const ttsSlider = document.getElementById('tts-rate');
+  const ttsLabel = document.getElementById('tts-rate-val');
+  ttsSlider.addEventListener('input', () => {
+    ttsRate = parseFloat(ttsSlider.value);
+    ttsLabel.textContent = ttsRate.toFixed(1) + '×';
+  });
+
+  function escapeHTML(s){
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    })[c]);
+  }
+
+  updateDailyBanner();
+  renderBlankPuzzle();
+})();
+</script>
+<script src="player-picker.js"></script>
+</body>
+</html>

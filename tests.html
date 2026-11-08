@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="اختبارات الصينية بالعربية — اسمع واختر، اقرأ واختر، تذكّر، واكتب الحروف الصينية">
+<title>اختبارات الصينية — بالعربية</title>
+<link rel="stylesheet" href="common.css">
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<script src="progress.js"></script>
+<style>
+  :root{
+    --bg:#f7f5f0; --card:#ffffff; --line:#e6e0d4;
+    --txt:#2b2b2b; --muted:#8a8375; --accent:#b5622a; --accent-bg:#fff8ef;
+    --ok:#27ae60; --ok-bg:#eafaf0; --bad:#c0392b; --bad-bg:#fdeceb;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:20px 20px 60px; background:var(--bg); color:var(--txt);
+    font-family:"Noto Naskh Arabic","Traditional Arabic","Segoe UI",serif;
+    line-height:1.7;
+  }
+  .wrap{max-width:820px; margin:0 auto}
+  .back{display:inline-block; color:var(--muted); text-decoration:none; margin-bottom:10px; font-size:.9rem}
+  .back:hover{color:var(--accent)}
+  header{text-align:center; border-bottom:2px solid var(--line); padding-bottom:20px; margin-bottom:26px}
+  h1{margin:0 0 6px; font-size:1.8rem; color:var(--accent)}
+  header p{margin:0; color:var(--muted); font-size:.95rem}
+
+  /* ---------- الشاشة الرئيسية ---------- */
+  #screen-home{text-align:center}
+  .mode-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:16px; margin-top:20px;
+  }
+  .mode-card{
+    background:var(--card); border:1px solid var(--line); border-radius:18px;
+    padding:26px 18px; cursor:pointer; font-family:inherit;
+    transition:all .2s;
+  }
+  .mode-card:hover{
+    border-color:var(--accent); transform:translateY(-4px);
+    background:var(--accent-bg); box-shadow:0 10px 24px rgba(181,98,42,.1);
+  }
+  .mode-icon{font-size:2.8rem; line-height:1}
+  .mode-card h3{margin:10px 0 4px; font-size:1.2rem; color:var(--accent)}
+  .mode-card p{margin:0; font-size:.88rem; color:var(--muted)}
+
+  /* ---------- شاشة الاختبار ---------- */
+  .quiz-top{
+    display:flex; justify-content:space-between; align-items:center;
+    gap:12px; margin-bottom:14px; flex-wrap:wrap;
+    background:var(--card); border:1px solid var(--line);
+    border-radius:14px; padding:12px 18px; font-size:.9rem;
+  }
+  .quiz-top span{color:var(--muted)}
+  .quiz-top b{color:var(--accent); font-size:1.05rem}
+  .progress{
+    height:8px; background:var(--line); border-radius:999px;
+    overflow:hidden; margin-bottom:22px;
+  }
+  .progress-fill{
+    height:100%; background:var(--accent); width:0%;
+    transition:width .3s ease;
+  }
+
+  .question-card{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:20px; padding:30px 24px; text-align:center;
+    margin-bottom:22px;
+  }
+  .question-label{
+    color:var(--muted); font-size:.9rem; margin-bottom:14px;
+  }
+  .question-char{
+    font-family:"Noto Sans SC","Microsoft YaHei","SimHei",sans-serif;
+    font-size:5rem; line-height:1; color:var(--txt); margin-bottom:14px;
+  }
+  .question-ar{
+    font-size:1.8rem; color:var(--accent); font-weight:700;
+  }
+  .play-big{
+    background:var(--accent); color:#fff; border:none; cursor:pointer;
+    padding:14px 34px; border-radius:12px; font-size:1.15rem; font-family:inherit;
+    display:inline-flex; align-items:center; gap:10px;
+    transition:all .2s; margin:8px 0;
+  }
+  .play-big:hover{background:#9c4f1e; transform:scale(1.04)}
+  .play-big.playing{animation:pulse 1s infinite}
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 3px rgba(181,98,42,.3)}
+    50%{box-shadow:0 0 0 10px rgba(181,98,42,.08)}
+  }
+
+  .options{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
+  @media (max-width:520px){.options{grid-template-columns:1fr}}
+  .option{
+    background:var(--card); border:2px solid var(--line);
+    border-radius:14px; padding:18px 14px; cursor:pointer;
+    font-family:inherit; font-size:1.15rem; color:var(--txt);
+    transition:all .18s; text-align:center;
+  }
+  .option:hover:not(:disabled){border-color:var(--accent); background:var(--accent-bg)}
+  .option:disabled{cursor:default}
+  .option.correct{border-color:var(--ok); background:var(--ok-bg); color:var(--ok); font-weight:700}
+  .option.wrong{border-color:var(--bad); background:var(--bad-bg); color:var(--bad)}
+  .option.char-option{font-family:"Noto Sans SC","Microsoft YaHei","SimHei",sans-serif; font-size:2rem}
+
+  .feedback{
+    text-align:center; min-height:40px; font-size:1.05rem;
+    font-weight:700; margin-bottom:14px;
+  }
+  .feedback.ok{color:var(--ok)}
+  .feedback.bad{color:var(--bad)}
+
+  .btn-row{display:flex; justify-content:center; gap:12px; margin-top:6px}
+  .btn{
+    background:var(--card); border:1px solid var(--line); color:var(--txt);
+    padding:11px 22px; border-radius:12px; cursor:pointer;
+    font-family:inherit; font-size:1rem; transition:all .2s;
+  }
+  .btn:hover{border-color:var(--accent); color:var(--accent); transform:translateY(-2px)}
+  .btn-primary{background:var(--accent); color:#fff; border-color:var(--accent)}
+  .btn-primary:hover{background:#9c4f1e; color:#fff}
+
+  /* ---------- اختبار الكتابة ---------- */
+  .write-target{
+    width:280px; height:280px; margin:0 auto 16px;
+    background:#fbf9f4; border:2px dashed var(--line);
+    border-radius:16px; display:flex; align-items:center; justify-content:center;
+  }
+
+  /* ---------- شاشة النتيجة ---------- */
+  #screen-result{text-align:center}
+  .result-score{
+    font-size:4rem; color:var(--accent); font-weight:700;
+    line-height:1; margin:20px 0 8px;
+  }
+  .result-label{color:var(--muted); font-size:1rem; margin-bottom:26px}
+  .result-msg{
+    background:var(--accent-bg); border:1px dashed var(--accent);
+    border-radius:14px; padding:16px 22px; margin-bottom:26px;
+    font-size:1.05rem;
+  }
+  .review-list{
+    text-align:right; background:var(--card); border:1px solid var(--line);
+    border-radius:16px; padding:16px 22px; margin-bottom:22px;
+  }
+  .review-list h3{margin:0 0 12px; font-size:1.05rem; color:var(--accent)}
+  .review-item{
+    display:flex; align-items:center; gap:14px;
+    padding:8px 0; border-bottom:1px dashed var(--line); font-size:.95rem;
+  }
+  .review-item:last-child{border-bottom:none}
+  .review-char{
+    font-family:"Noto Sans SC","Microsoft YaHei","SimHei",sans-serif;
+    font-size:1.6rem; min-width:44px; text-align:center;
+  }
+  .review-mark{font-size:1.3rem; min-width:26px; text-align:center}
+  .review-mark.ok{color:var(--ok)}
+  .review-mark.bad{color:var(--bad)}
+  .review-info{flex:1}
+  .review-info b{color:var(--accent)}
+
+  .hidden{display:none !important}
+  footer{text-align:center; margin-top:36px; color:var(--muted); font-size:.82rem}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
+
+<main class="wrap" id="main-content">
+  <a href="index.html" class="back">← الرئيسية</a>
+
+  <!-- ============ الشاشة الرئيسية ============ -->
+  <section id="screen-home">
+    <header>
+      <h1>اختبارات الصينية</h1>
+      <p>اختبر نفسك في الاستماع والقراءة والتذكر والكتابة</p>
+    </header>
+
+    <div class="mode-grid">
+      <button class="mode-card" data-mode="listen" aria-label="وضع اسمع واختر — تسمع الكلمة وتختار الحرف الصحيح">
+        <div class="mode-icon" aria-hidden="true">🎧</div>
+        <h3>اسمع واختر</h3>
+        <p>تسمع الكلمة → تختار الحرف الصحيح</p>
+      </button>
+      <button class="mode-card" data-mode="read" aria-label="وضع اقرأ واختر — ترى الحرف وتختار المعنى بالعربية">
+        <div class="mode-icon" aria-hidden="true">👁️</div>
+        <h3>اقرأ واختر</h3>
+        <p>ترى الحرف → تختار المعنى بالعربية</p>
+      </button>
+      <button class="mode-card" data-mode="recall" aria-label="وضع تذكّر — ترى المعنى وتختار الحرف الصحيح">
+        <div class="mode-icon" aria-hidden="true">🧠</div>
+        <h3>تذكّر</h3>
+        <p>ترى المعنى → تختار الحرف الصحيح</p>
+      </button>
+      <button class="mode-card" data-mode="write" aria-label="وضع اكتب — ترى المعنى وتسمع وترسم الحرف">
+        <div class="mode-icon" aria-hidden="true">✍️</div>
+        <h3>اكتب</h3>
+        <p>ترى المعنى وتسمع → ترسم الحرف</p>
+      </button>
+      <button class="mode-card" data-mode="mixed" aria-label="وضع مختلط — خليط من كل الأنواع">
+        <div class="mode-icon" aria-hidden="true">🎲</div>
+        <h3>مختلط</h3>
+        <p>خليط من كل الأنواع — التحدي الكامل</p>
+      </button>
+    </div>
+
+    <div style="margin-top:20px; background:#fff8ef; border:1px dashed var(--accent); border-radius:14px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px">
+      <div>
+        <div style="font-weight:700; color:var(--accent); font-size:1.05rem">🪙 رصيد العملات الإمبراطورية: <span id="home-coins" style="font-size:1.3rem; color:#b5622a">50</span> عملة</div>
+        <div style="font-size:.85rem; color:var(--muted)">كل إجابة صحيحة تمنحك +5 عملات، والجولة الكاملة تمنحك +25 إضافية. تُستخدم العملات حصرياً لامتلاك وتسمية المدن في الخريطة!</div>
+      </div>
+      <a href="map.html" class="btn btn-primary" style="padding:8px 18px; border-radius:999px; font-size:.9rem; text-decoration:none">🗺️ خريطة المدن ←</a>
+    </div>
+
+    <div style="margin-top:14px; background:#f4f9f4; border:1px dashed var(--ok); border-radius:14px; padding:12px 18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px">
+      <div style="font-weight:700; color:var(--ok); font-size:.95rem">🔥 هل تريد تحدي اليوم السريع؟ (املاء الفراغ في الجمل ورادار الأخبار الحية)</div>
+      <a href="daily.html" class="btn" style="padding:6px 16px; border-radius:999px; font-size:.85rem; text-decoration:none; border-color:var(--ok); color:var(--ok)">ابدأ التحدي اليومي ←</a>
+    </div>
+  </section>
+
+  <!-- ============ شاشة الاختبار ============ -->
+  <section id="screen-quiz" class="hidden">
+    <div class="quiz-top">
+      <span>سؤال <b id="q-num">1</b> / <b id="q-total">8</b></span>
+      <span>النتيجة: <b id="q-score">0</b></span>
+      <span>السلسلة: <b id="q-streak">0</b> 🔥</span>
+      <span>العملات: <b id="q-coins" style="color:#b5622a">50</b> 🪙</span>
+    </div>
+    <div class="progress" role="progressbar" aria-label="تقدم الاختبار" aria-valuemin="0" aria-valuemax="100"><div class="progress-fill" id="progress-fill"></div></div>
+
+    <div class="question-card" id="question-card"></div>
+
+    <div class="feedback" id="feedback" aria-live="polite"></div>
+
+    <div class="options" id="options"></div>
+
+    <div class="btn-row hidden" id="next-row">
+      <button class="btn btn-primary" id="btn-next">التالي ←</button>
+    </div>
+  </section>
+
+  <!-- ============ شاشة النتيجة ============ -->
+  <section id="screen-result" class="hidden">
+    <h1 style="color:var(--accent); font-size:1.8rem; margin-bottom:6px">انتهى الاختبار</h1>
+    <div class="result-score" id="result-score">0/0</div>
+    <div class="result-label" id="result-percent">0%</div>
+    <div class="result-msg" id="result-msg"></div>
+    <div id="result-coins-box" style="background:#fff8ef; border:1px solid #d4af37; border-radius:14px; padding:16px 20px; margin-bottom:24px; font-weight:bold; color:#b5622a; text-align:center">
+      🪙 العملات المكتسبة: <span id="round-coins" style="font-size:1.4rem">+0</span> عملة | إجمالي رصيدك: <span id="total-coins" style="font-size:1.4rem">50</span> عملة
+      <div style="font-size:.85rem; font-weight:normal; color:var(--muted); margin-top:6px">تُستخدم العملات في خريطة الصين لإطلاق أسماء عربية خاصة بك على المدن التي تمتلكها!</div>
+    </div>
+    <div class="review-list" id="review-list"></div>
+    <div class="btn-row">
+      <button class="btn" id="btn-home">↺ اختبار آخر</button>
+      <a href="map.html" class="btn btn-primary" style="text-decoration:none">🗺️ اذهب لخريطة المدن ←</a>
+      <a href="index.html" class="btn">الرئيسية</a>
+    </div>
+  </section>
+
+  <footer>كل اختبار 8 أسئلة عشوائية من 36 حرفاً — الصوت من Audio-cmn</footer>
+</main>
+
+<script>
+(function(){
+  const HSK_DIR  = 'audio-cmn/64k/hsk/';
+  const SYLL_DIR = 'audio-cmn/64k/syllabs/';
+  const HZ_LOCAL = 'hanzi-data/';
+  const HZ_CDN   = 'https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0.1/';
+
+  const QUESTIONS_PER_ROUND = 8;
+
+  const BANK = [
+    { char:'一', sound:'يِ', meaning:'واحد', tone:1, audio:'yi1' },
+    { char:'二', sound:'عَر', meaning:'اثنان', tone:4, audio:'er4' },
+    { char:'三', sound:'سَان', meaning:'ثلاثة', tone:1, audio:'san1' },
+    { char:'四', sound:'سِ', meaning:'أربعة', tone:4, audio:'si4' },
+    { char:'五', sound:'وُو', meaning:'خمسة', tone:3, audio:'wu3' },
+    { char:'六', sound:'لِيُو', meaning:'ستة', tone:4, audio:'liu4' },
+    { char:'七', sound:'چِي', meaning:'سبعة', tone:1, audio:'qi1' },
+    { char:'八', sound:'بَا', meaning:'ثمانية', tone:1, audio:'ba1' },
+    { char:'九', sound:'جِيُو', meaning:'تسعة', tone:3, audio:'jiu3' },
+    { char:'十', sound:'شِ', meaning:'عشرة', tone:2, audio:'shi2' },
+    { char:'我', sound:'وُو', meaning:'أنا', tone:3, audio:'wo3' },
+    { char:'你', sound:'نِي', meaning:'أنتَ', tone:3, audio:'ni3' },
+    { char:'他', sound:'تَا', meaning:'هو', tone:1, audio:'ta1' },
+    { char:'她', sound:'تَا', meaning:'هي', tone:1, audio:'ta1' },
+    { char:'好', sound:'هَاو', meaning:'جيد', tone:3, audio:'hao3' },
+    { char:'是', sound:'شِ', meaning:'يكون', tone:4, audio:'shi4' },
+    { char:'不', sound:'بُو', meaning:'لا', tone:4, audio:'bu4' },
+    { char:'人', sound:'ژِن', meaning:'إنسان', tone:2, audio:'ren2' },
+    { char:'大', sound:'دَا', meaning:'كبير', tone:4, audio:'da4' },
+    { char:'小', sound:'شِيَاو', meaning:'صغير', tone:3, audio:'xiao3' },
+    { char:'水', sound:'شُوِي', meaning:'ماء', tone:3, audio:'shui3' },
+    { char:'火', sound:'هُوُو', meaning:'نار', tone:3, audio:'huo3' },
+    { char:'山', sound:'شَان', meaning:'جبل', tone:1, audio:'shan1' },
+    { char:'口', sound:'كُوو', meaning:'فم', tone:3, audio:'kou3' },
+    { char:'日', sound:'ژِ', meaning:'شمس / يوم', tone:4, audio:'ri4' },
+    { char:'月', sound:'يُوِه', meaning:'قمر / شهر', tone:4, audio:'yue4' },
+    { char:'女', sound:'نُوِ', meaning:'امرأة', tone:3, audio:'nv3' },
+    { char:'子', sound:'زِ', meaning:'طفل', tone:3, audio:'zi3' },
+    { char:'木', sound:'مُو', meaning:'خشب / شجرة', tone:4, audio:'mu4' },
+    { char:'心', sound:'شِين', meaning:'قلب', tone:1, audio:'xin1' },
+    { char:'手', sound:'شُوُو', meaning:'يد', tone:3, audio:'shou3' },
+    { char:'明', sound:'مِين', meaning:'مضيء', tone:2, audio:'ming2' },
+    { char:'林', sound:'لِين', meaning:'غابة', tone:2, audio:'lin2' },
+    { char:'休', sound:'شِيُو', meaning:'يستريح', tone:1, audio:'xiu1' },
+    { char:'家', sound:'جِيَا', meaning:'بيت / عائلة', tone:1, audio:'jia1' },
+    { char:'天', sound:'تِيَان', meaning:'سماء', tone:1, audio:'tian1' },
+    // كلمات وأفعال HSK 1 المضافة
+    { char:'学', sound:'شُوِه', meaning:'يتعلم / دراسة', tone:2, audio:'xue2' },
+    { char:'生', sound:'شِنگ', meaning:'يولد / طالب', tone:1, audio:'sheng1' },
+    { char:'吃', sound:'چِ', meaning:'يأكل', tone:1, audio:'chi1' },
+    { char:'喝', sound:'هِ', meaning:'يشرب', tone:1, audio:'he1' },
+    { char:'看', sound:'كَان', meaning:'يرى / يقرأ', tone:4, audio:'kan4' },
+    { char:'听', sound:'تِينگ', meaning:'يستمع', tone:1, audio:'ting1' },
+    { char:'说', sound:'شُوُو', meaning:'يتكلم / يقول', tone:1, audio:'shuo1' },
+    { char:'写', sound:'شِيِه', meaning:'يكتب', tone:3, audio:'xie3' },
+    { char:'去', sound:'چُو', meaning:'يذهب', tone:4, audio:'qu4' },
+    { char:'来', sound:'لَاي', meaning:'يأتي', tone:2, audio:'lai2' },
+    { char:'有', sound:'يُو', meaning:'يملك / يوجد', tone:3, audio:'you3' },
+    { char:'没', sound:'مِي', meaning:'ليس / نفي', tone:2, audio:'mei2' },
+    { char:'书', sound:'شُو', meaning:'كتاب', tone:1, audio:'shu1' },
+    { char:'中', sound:'ژُونگ', meaning:'وسط / الصين', tone:1, audio:'zhong1' },
+    { char:'文', sound:'وِن', meaning:'لغة / نص', tone:2, audio:'wen2' },
+    { char:'门', sound:'مِين', meaning:'باب', tone:2, audio:'men2' },
+    { char:'车', sound:'چِ', meaning:'عربة / سيارة', tone:1, audio:'che1' },
+    { char:'电', sound:'دْيَان', meaning:'كهرباء', tone:4, audio:'dian4' },
+    { char:'话', sound:'هُوَا', meaning:'كلام / حديث', tone:4, audio:'hua4' },
+    { char:'马', sound:'مَـا', meaning:'حصان', tone:3, audio:'ma3' },
+    { char:'鸟', sound:'نْيَاو', meaning:'طائر', tone:3, audio:'niao3' },
+    { char:'鱼', sound:'يُو', meaning:'سمك', tone:2, audio:'yu2' },
+    { char:'羊', sound:'يَانگ', meaning:'خروف / ماعز', tone:2, audio:'yang2' },
+    { char:'牛', sound:'نْيُو', meaning:'ثور / بقرة', tone:2, audio:'niu2' },
+    { char:'上', sound:'شَانگ', meaning:'أعلى / فوق', tone:4, audio:'shang4' },
+    { char:'下', sound:'شْيَا', meaning:'أسفل / تحت', tone:4, audio:'xia4' },
+    { char:'里', sound:'لِي', meaning:'داخل', tone:3, audio:'li3' },
+    { char:'前', sound:'چْيَان', meaning:'أمام / قبل', tone:2, audio:'qian2' },
+    { char:'后', sound:'هُوو', meaning:'خلف / بعد', tone:4, audio:'hou4' },
+    { char:'在', sound:'زَاي', meaning:'يتواجد في', tone:4, audio:'zai4' },
+    { char:'这', sound:'ژِه', meaning:'هذا', tone:4, audio:'zhe4' },
+    { char:'那', sound:'نَا', meaning:'ذلك', tone:4, audio:'na4' },
+    { char:'哪', sound:'نَا', meaning:'أي / أين', tone:3, audio:'na3' },
+    { char:'谁', sound:'شِي', meaning:'من؟', tone:2, audio:'shei2' },
+    { char:'很', sound:'هِن', meaning:'جداً', tone:3, audio:'hen3' },
+    { char:'也', sound:'يِي', meaning:'أيضاً', tone:3, audio:'ye3' },
+    { char:'都', sound:'دُوو', meaning:'كلاهما / جميعهم', tone:1, audio:'dou1' },
+    { char:'个', sound:'گِه', meaning:'أداة عد عامة', tone:4, audio:'ge4' }
+  ];
+
+  // ---------- حالة الاختبار ----------
+  const state = {
+    mode: null,
+    questions: [],
+    index: 0,
+    score: 0,
+    streak: 0,
+    bestStreak: 0,
+    answers: []   // {q, correct, chosen}
+  };
+
+  let currentWriter = null;
+  let currentAudio = null;
+  let playbackToken = 0;
+
+  // ---------- أدوات ----------
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function pickDistractors(correct, key, count){
+    const pool = BANK.filter(x => x[key] !== correct[key]);
+    return shuffle(pool).slice(0, count);
+  }
+
+  function loadCharData(ch){
+    return fetch(HZ_LOCAL + ch + '.json')
+      .then(r => { if (!r.ok) throw 0; return r.json(); })
+      .catch(() => fetch(HZ_CDN + ch + '.json').then(r => {
+        if (!r.ok) throw 0;
+        return r.json();
+      }));
+  }
+
+  function stopAudio(){
+    playbackToken++;
+    if (currentAudio){
+      try{ currentAudio.pause(); }catch(e){}
+      currentAudio = null;
+    }
+  }
+
+  function playOne(url, myToken){
+    return new Promise(resolve => {
+      if (myToken !== playbackToken) return resolve(false);
+      const a = new Audio();
+      let settled = false;
+      const settle = ok => {
+        if (settled) return;
+        settled = true;
+        if (currentAudio === a) currentAudio = null;
+        resolve(ok);
+      };
+      a.addEventListener('ended', () => settle(true), { once:true });
+      a.addEventListener('error', () => settle(false), { once:true });
+      a.src = encodeURI(url);
+      currentAudio = a;
+      const p = a.play();
+      if (p && p.catch) p.catch(() => settle(false));
+    });
+  }
+
+  async function playWord(item, buttonEl){
+    stopAudio();
+    const myToken = playbackToken;
+    if (buttonEl) buttonEl.classList.add('playing');
+
+    let ok = await playOne(HSK_DIR + 'cmn-' + item.char + '.mp3', myToken);
+    if (myToken !== playbackToken) return;
+    if (!ok && item.audio){
+      await playOne(SYLL_DIR + 'cmn-' + item.audio + '.mp3', myToken);
+    }
+    if (buttonEl) buttonEl.classList.remove('playing');
+  }
+
+  // ---------- بناء الأسئلة ----------
+  function buildQuestion(mode){
+    const correct = BANK[Math.floor(Math.random() * BANK.length)];
+
+    if (mode === 'listen'){
+      const distractors = pickDistractors(correct, 'char', 3);
+      const options = shuffle([correct, ...distractors]);
+      return {
+        type:'listen',
+        correct,
+        prompt:{ audio:true },
+        options: options.map(o => ({ text:o.char, value:o.char, isChar:true })),
+        correctValue: correct.char
+      };
+    }
+    if (mode === 'read'){
+      const distractors = pickDistractors(correct, 'meaning', 3);
+      const options = shuffle([correct, ...distractors]);
+      return {
+        type:'read',
+        correct,
+        prompt:{ char: correct.char },
+        options: options.map(o => ({ text:o.meaning, value:o.meaning, isChar:false })),
+        correctValue: correct.meaning
+      };
+    }
+    if (mode === 'recall'){
+      const distractors = pickDistractors(correct, 'char', 3);
+      const options = shuffle([correct, ...distractors]);
+      return {
+        type:'recall',
+        correct,
+        prompt:{ meaning: correct.meaning },
+        options: options.map(o => ({ text:o.char, value:o.char, isChar:true })),
+        correctValue: correct.char
+      };
+    }
+    if (mode === 'write'){
+      return {
+        type:'write',
+        correct,
+        prompt:{ meaning: correct.meaning, audio:true },
+        options: null,
+        correctValue: correct.char
+      };
+    }
+    // mixed → اختيار عشوائي بين الأنواع الأربعة
+    const types = ['listen','read','recall','write'];
+    return buildQuestion(types[Math.floor(Math.random() * types.length)]);
+  }
+
+  function buildRound(mode){
+    const qs = [];
+    const usedChars = new Set();
+    while (qs.length < QUESTIONS_PER_ROUND){
+      const q = buildQuestion(mode === 'mixed' ? 'mixed' : mode);
+      // تجنب تكرار نفس الحرف في نفس الجولة
+      if (usedChars.has(q.correct.char) && usedChars.size < BANK.length) continue;
+      usedChars.add(q.correct.char);
+      qs.push(q);
+    }
+    return qs;
+  }
+
+  // ---------- عرض الأسئلة ----------
+  function renderQuestion(){
+    const q = state.questions[state.index];
+    const card = document.getElementById('question-card');
+    card.innerHTML = '';
+
+    // السؤال
+    const label = document.createElement('div');
+    label.className = 'question-label';
+    if (q.type === 'listen') label.textContent = '🎧 اسمع الكلمة ثم اختر الحرف الصحيح';
+    else if (q.type === 'read') label.textContent = '👁️ اقرأ الحرف ثم اختر المعنى الصحيح';
+    else if (q.type === 'recall') label.textContent = '🧠 اختر الحرف الذي يعني:';
+    else label.textContent = '✍️ ارسم الحرف الذي يعني:';
+    card.appendChild(label);
+
+    // المحتوى
+    if (q.prompt.audio){
+      const btn = document.createElement('button');
+      btn.className = 'play-big';
+      btn.innerHTML = '🔊 استمع';
+      btn.addEventListener('click', () => playWord(q.correct, btn));
+      card.appendChild(btn);
+      // تشغيل تلقائي بعد لحظة
+      setTimeout(() => playWord(q.correct, btn), 250);
+    }
+    if (q.prompt.char){
+      const ch = document.createElement('div');
+      ch.className = 'question-char';
+      ch.textContent = q.prompt.char;
+      card.appendChild(ch);
+    }
+    if (q.prompt.meaning){
+      const ar = document.createElement('div');
+      ar.className = 'question-ar';
+      ar.textContent = q.prompt.meaning;
+      card.appendChild(ar);
+    }
+
+    // منطقة الكتابة أو الخيارات
+    const optionsBox = document.getElementById('options');
+    optionsBox.innerHTML = '';
+
+    if (q.type === 'write'){
+      const target = document.createElement('div');
+      target.className = 'write-target';
+      target.id = 'writer-target';
+      optionsBox.appendChild(target);
+      startWriteQuiz(q);
+    } else {
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option' + (opt.isChar ? ' char-option' : '');
+        btn.textContent = opt.text;
+        btn.addEventListener('click', () => chooseOption(btn, opt.value, q));
+        optionsBox.appendChild(btn);
+      });
+    }
+
+    // إخفاء زر التالي وإظهار القسم
+    document.getElementById('next-row').classList.add('hidden');
+    document.getElementById('feedback').textContent = '';
+    document.getElementById('feedback').className = 'feedback';
+
+    updateStats();
+  }
+
+  function updateStats(){
+    document.getElementById('q-num').textContent = state.index + 1;
+    document.getElementById('q-total').textContent = state.questions.length;
+    document.getElementById('q-score').textContent = state.score;
+    document.getElementById('q-streak').textContent = state.streak;
+    const coinsEl = document.getElementById('q-coins');
+    if (coinsEl) coinsEl.textContent = CNProgress.getCoins();
+    const pct = (state.index / state.questions.length) * 100;
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }
+
+  function chooseOption(btn, value, q){
+    // تعطيل كل الخيارات
+    document.querySelectorAll('#options .option').forEach(b => b.disabled = true);
+
+    const isCorrect = value === q.correctValue;
+    if (isCorrect){
+      btn.classList.add('correct');
+      state.score++;
+      state.streak++;
+      if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+      setFeedback('✅ صحيح! (+5 عملات إمبراطورية 🪙)', 'ok');
+      // --- العملات حصرياً من الاختبارات ---
+      CNProgress.addCoins(5);
+      state.coinsEarned = (state.coinsEarned || 0) + 5;
+    } else {
+      btn.classList.add('wrong');
+      state.streak = 0;
+      setFeedback('❌ خطأ — الصحيح: ' + q.correct.char + ' (' + q.correct.meaning + ')', 'bad');
+      // إبراز الخيار الصحيح
+      document.querySelectorAll('#options .option').forEach(b => {
+        if (b.textContent === q.correctValue) b.classList.add('correct');
+      });
+    }
+
+    state.answers.push({ q, isCorrect, chosen: value });
+
+    // --- progress tracking ---
+    CNProgress.addXP(CNProgress.XP_REWARDS.testCorrect);
+    if (isCorrect && q.correct && q.correct.char) {
+      CNProgress.recordActivity('char-master', { char: q.correct.char });
+    }
+    CNProgress.updateProfile(p => {
+      if (state.streak > p.stats.bestStreak) p.stats.bestStreak = state.streak;
+    });
+    updateStats();
+    document.getElementById('next-row').classList.remove('hidden');
+  }
+
+  function setFeedback(text, cls){
+    const fb = document.getElementById('feedback');
+    fb.textContent = text;
+    fb.className = 'feedback ' + cls;
+  }
+
+   // ---------- اختبار الكتابة ----------
+  function startWriteQuiz(q){
+    const target = document.getElementById('writer-target');
+    currentWriter = HanziWriter.create(target, q.correct.char, {
+      width: 280,
+      height: 280,
+      padding: 16,
+      showOutline: true,
+      strokeColor: '#2b2b2b',
+      outlineColor: '#e6e0d4',
+      highlightColor: '#27ae60',
+      drawingColor: '#b5622a',
+      drawingWidth: 22,
+      charDataLoader: (ch, onLoad, onError) => {
+        loadCharData(ch).then(onLoad).catch(onError);
+      }
+    });
+
+    let mistakes = 0;
+    currentWriter.quiz({
+      onMistake: () => { mistakes++; },
+      onComplete: (summary) => {
+        const total = summary.totalMistakes || mistakes;
+        const isCorrect = total <= 1; // خطأ واحد مقبول
+        if (isCorrect){
+          state.score++;
+          state.streak++;
+          if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+          setFeedback('✅ أحسنت! رسم صحيح (+5 عملات إمبراطورية 🪙)', 'ok');
+          CNProgress.addCoins(5);
+          state.coinsEarned = (state.coinsEarned || 0) + 5;
+        } else {
+          state.streak = 0;
+          setFeedback('❌ أخطاء: ' + total + ' — الحرف: ' + q.correct.char + ' (' + q.correct.sound + ')', 'bad');
+        }
+        state.answers.push({ q, isCorrect, chosen:'(كتابة)' });
+        updateStats();
+        document.getElementById('next-row').classList.remove('hidden');
+      }
+    });
+  }
+
+  // ---------- الانتقال للسؤال التالي ----------
+  function nextQuestion(){
+    if (currentWriter){ try{ currentWriter.cancelQuiz && currentWriter.cancelQuiz(); }catch(e){} currentWriter = null; }
+    stopAudio();
+    state.index++;
+    if (state.index >= state.questions.length){
+      showResult();
+    } else {
+      renderQuestion();
+    }
+  }
+
+  // ---------- النتيجة ----------
+  function showResult(){
+    document.getElementById('screen-quiz').classList.add('hidden');
+    document.getElementById('screen-result').classList.remove('hidden');
+
+    const total = state.questions.length;
+    const score = state.score;
+    const pct = Math.round((score / total) * 100);
+
+    document.getElementById('result-score').textContent = score + '/' + total;
+    document.getElementById('result-percent').textContent = pct + '%';
+
+    // --- progress tracking ---
+    CNProgress.recordActivity('test', {
+      correct: score,
+      total: total,
+      streak: state.bestStreak,
+      perfect: score === total
+    });
+    if (score === total){
+      CNProgress.addXP(CNProgress.XP_REWARDS.testPerfect);
+      CNProgress.addCoins(25);
+      state.coinsEarned = (state.coinsEarned || 0) + 25;
+    }
+
+    const roundCoinsEl = document.getElementById('round-coins');
+    if (roundCoinsEl) roundCoinsEl.textContent = '+' + (state.coinsEarned || 0);
+    const totalCoinsEl = document.getElementById('total-coins');
+    if (totalCoinsEl) totalCoinsEl.textContent = CNProgress.getCoins();
+
+    const newly = CNProgress.checkAchievements();
+    if (newly.length){
+      setTimeout(() => alert('🏆 إنجاز جديد: ' + newly.map(a => a.name).join('، ')), 300);
+    }
+
+    let msg;
+    if (pct === 100) msg = '🏆 مثالي! أتقنت الجولة تماماً.';
+    else if (pct >= 80) msg = '🎉 ممتاز! مستواك قوي.';
+    else if (pct >= 60) msg = '👍 جيد — راجع الأخطاء وكرر.';
+    else if (pct >= 40) msg = '📖 تحتاج مراجعة — ارجع لصفحة الكتابة والنطق.';
+    else msg = '💪 لا بأس، التكرار يصنع الإتقان. ابدأ بجولة أسهل.';
+    msg += ' أطول سلسلة صحيحة: ' + state.bestStreak + ' 🔥';
+    document.getElementById('result-msg').textContent = msg;
+
+    // قائمة المراجعة
+    const list = document.getElementById('review-list');
+    list.innerHTML = '<h3>مراجعة الإجابات</h3>';
+    state.answers.forEach(a => {
+      const item = document.createElement('div');
+      item.className = 'review-item';
+      const mark = document.createElement('span');
+      mark.className = 'review-mark ' + (a.isCorrect ? 'ok' : 'bad');
+      mark.textContent = a.isCorrect ? '✓' : '✗';
+      const ch = document.createElement('span');
+      ch.className = 'review-char';
+      ch.textContent = a.q.correct.char;
+      const info = document.createElement('div');
+      info.className = 'review-info';
+      info.innerHTML = '<b>' + a.q.correct.meaning + '</b> — ' + a.q.correct.sound;
+      item.appendChild(mark);
+      item.appendChild(ch);
+      item.appendChild(info);
+      list.appendChild(item);
+    });
+  }
+
+  // ---------- بدء الجولة ----------
+  function startQuiz(mode){
+    state.mode = mode;
+    state.questions = buildRound(mode);
+    state.index = 0;
+    state.score = 0;
+    state.streak = 0;
+    state.bestStreak = 0;
+    state.coinsEarned = 0;
+    state.answers = [];
+
+    document.getElementById('screen-home').classList.add('hidden');
+    document.getElementById('screen-result').classList.add('hidden');
+    document.getElementById('screen-quiz').classList.remove('hidden');
+
+    renderQuestion();
+  }
+
+  function refreshHomeCoins(){
+    const homeCoins = document.getElementById('home-coins');
+    if (homeCoins) homeCoins.textContent = CNProgress.getCoins();
+  }
+
+  // ---------- ربط الأحداث ----------
+  document.querySelectorAll('.mode-card').forEach(btn => {
+    btn.addEventListener('click', () => startQuiz(btn.dataset.mode));
+  });
+
+  document.getElementById('btn-next').addEventListener('click', nextQuestion);
+
+  document.getElementById('btn-home').addEventListener('click', () => {
+    document.getElementById('screen-result').classList.add('hidden');
+    document.getElementById('screen-quiz').classList.add('hidden');
+    document.getElementById('screen-home').classList.remove('hidden');
+    refreshHomeCoins();
+    stopAudio();
+    if (currentWriter){ try{ currentWriter.cancelQuiz && currentWriter.cancelQuiz(); }catch(e){} currentWriter = null; }
+  });
+
+  refreshHomeCoins();
+})();
+</script>
+  <script src="player-picker.js"></script>
+</body>
+</html>

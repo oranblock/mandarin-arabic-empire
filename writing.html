@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="تعلم كتابة الحروف الصينية — ترتيب الخطوط والمكونات مع النطق الصوتي بالعربية">
+<title>تعلم الكتابة الصينية — مع النطق</title>
+<link rel="stylesheet" href="common.css">
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<style>
+  :root{
+    --bg:#f7f5f0; --card:#ffffff; --line:#e6e0d4;
+    --txt:#2b2b2b; --muted:#8a8375; --accent:#b5622a;
+    --t1:#c0392b; --t2:#27ae60; --t3:#2980b9; --t4:#8e44ad;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:20px 20px 60px; background:var(--bg); color:var(--txt);
+    font-family:"Noto Naskh Arabic","Traditional Arabic","Segoe UI",serif;
+    line-height:1.7;
+  }
+  .wrap{max-width:1000px; margin:0 auto}
+
+  .back{
+    display:inline-block; color:var(--muted); text-decoration:none;
+    margin-bottom:10px; font-size:.9rem;
+  }
+  .back:hover{color:var(--accent)}
+
+  header{text-align:center; border-bottom:2px solid var(--line); padding-bottom:20px; margin-bottom:26px}
+  h1{margin:0 0 6px; font-size:1.8rem; color:var(--accent)}
+  header p{margin:0; color:var(--muted); font-size:.95rem}
+
+  /* لوحة التفاصيل */
+  .detail-panel{
+    background:var(--card); border:1px solid var(--line); border-radius:20px;
+    padding:22px; display:grid; grid-template-columns:320px 1fr; gap:24px;
+    align-items:start; margin-bottom:30px;
+  }
+  @media (max-width:700px){.detail-panel{grid-template-columns:1fr}}
+
+  .detail-visual{
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+  }
+  #writer-target{
+    width:300px; height:300px; background:#fbf9f4;
+    border:2px dashed var(--line); border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .quiz-result{
+    min-height:28px; font-weight:700; color:var(--t2); font-size:1.1rem;
+  }
+
+  .detail-header{display:flex; align-items:center; gap:16px; margin-bottom:8px}
+  .detail-char{
+    font-family:"Noto Sans SC","Microsoft YaHei","SimHei",sans-serif;
+    font-size:3.4rem; line-height:1; color:var(--accent);
+  }
+  .detail-sound{font-size:1.6rem; font-weight:700; color:var(--accent)}
+  .detail-meaning{font-size:1rem; color:var(--muted)}
+
+  .detail-tone{
+    display:inline-block; margin-bottom:14px;
+    padding:4px 14px; border-radius:999px;
+    color:#fff; font-size:.85rem;
+  }
+  .detail-tone.t1{background:var(--t1)}
+  .detail-tone.t2{background:var(--t2)}
+  .detail-tone.t3{background:var(--t3)}
+  .detail-tone.t4{background:var(--t4)}
+
+  .detail-radical{
+    background:#fff8ef; border:1px dashed var(--accent);
+    border-radius:12px; padding:12px 16px; margin-bottom:14px; font-size:.95rem;
+  }
+  .radical-parts{
+    font-family:"Noto Sans SC","Microsoft YaHei","SimHei",sans-serif;
+    font-size:1.4rem; color:var(--accent); letter-spacing:6px; margin-bottom:6px;
+  }
+  .radical-mnemonic{color:var(--txt)}
+
+  .detail-actions{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px}
+  .btn{
+    background:var(--card); border:1px solid var(--line); color:var(--txt);
+    padding:9px 16px; border-radius:10px; cursor:pointer;
+    font-family:inherit; font-size:.95rem;
+    transition:all .18s;
+  }
+  .btn:hover{border-color:var(--accent); color:var(--accent); transform:translateY(-2px)}
+  .btn-primary{background:var(--accent); color:#fff; border-color:var(--accent)}
+  .btn-primary:hover{background:#9c4f1e; color:#fff}
+
+  .speed-control{
+    display:flex; align-items:center; gap:10px; margin-bottom:10px;
+    font-size:.9rem; color:var(--muted);
+  }
+  .speed-control input[type=range]{width:140px; accent-color:var(--accent)}
+  #rate-val{color:var(--accent); font-weight:700; min-width:38px}
+
+  .auto-play-label{
+    display:flex; align-items:center; gap:8px; font-size:.9rem; color:var(--muted);
+    cursor:pointer;
+  }
+  .auto-play-label input{accent-color:var(--accent)}
+
+  /* الشبكة */
+  .group-title{
+    font-size:1.1rem; margin:30px 0 12px; color:var(--accent);
+    padding-right:12px; border-right:4px solid var(--accent);
+  }
+  .character-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(90px,1fr));
+    gap:10px;
+  }
+  .char-card{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:12px 6px; cursor:pointer; font-family:inherit;
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    transition:all .18s;
+  }
+  .char-card:hover{border-color:var(--accent); transform:translateY(-3px); box-shadow:0 6px 16px rgba(0,0,0,.06)}
+  .char-card.active{border-color:var(--accent); background:#fff8ef; box-shadow:0 0 0 3px rgba(181,98,42,.15)}
+  .char-shape{
+    font-family:"Noto Sans SC","Microsoft YaHei","SimHei",sans-serif;
+    font-size:2rem; line-height:1; color:var(--txt);
+  }
+  .char-sound{font-size:.78rem; color:var(--accent); font-weight:700}
+
+  .note{
+    background:#fff8ef; border:1px dashed var(--accent);
+    border-radius:14px; padding:16px 20px; margin-top:30px; font-size:.9rem;
+  }
+  .note strong{color:var(--accent)}
+  footer{text-align:center; margin-top:30px; color:var(--muted); font-size:.82rem}
+</style>
+  <script src="progress.js"></script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
+
+<main class="wrap" id="main-content">
+
+  <a href="index.html" class="back">← الرئيسية</a>
+
+  <header>
+    <h1>تعلم الكتابة الصينية</h1>
+    <p>اختر حرفاً — شاهد ترتيب الخطوط، اسمع النطق، افهم المكوّنات</p>
+  </header>
+
+  <section class="detail-panel" id="detail-panel" role="region" aria-label="تفاصيل الحرف ورسمه">
+    <div class="detail-visual">
+      <div id="writer-target"></div>
+      <div class="quiz-result" id="quiz-result" aria-live="polite"></div>
+    </div>
+    <div class="detail-info">
+      <div class="detail-header">
+        <span class="detail-char" id="detail-char">一</span>
+        <div>
+          <div class="detail-sound" id="detail-sound">يِ</div>
+          <div class="detail-meaning" id="detail-meaning">واحد</div>
+        </div>
+      </div>
+      <div class="detail-tone t1" id="detail-tone">النبرة ١ — مستوية</div>
+      <div class="detail-radical" id="detail-radical" style="display:none"></div>
+
+      <div class="detail-actions">
+        <button class="btn btn-primary" id="btn-audio" aria-label="تشغيل نطق الحرف">🔊 صوت</button>
+        <button class="btn" id="btn-animate" aria-label="عرض ترتيب الخطوط">✍️ ترتيب الخطوط</button>
+        <button class="btn" id="btn-quiz" aria-label="اختبار رسم الحرف">🎯 اختبرني</button>
+        <button class="btn" id="btn-reset" aria-label="إعادة رسم الحرف">↺ إعادة</button>
+      </div>
+
+      <div class="speed-control">
+        <label for="rate">سرعة الصوت:</label>
+        <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="1" aria-label="سرعة الصوت">
+        <span id="rate-val" aria-live="polite">1.0×</span>
+      </div>
+      <label class="auto-play-label">
+        <input type="checkbox" id="auto-audio"> تشغيل الصوت تلقائياً عند اختيار حرف
+      </label>
+    </div>
+  </section>
+
+  <section id="character-grid"></section>
+
+  <div class="note">
+    <strong>لماذا المكوّنات مهمة؟</strong>
+    كل حرف صيني مبني من «راديكالات» (مكونات) لها معنى. حين تفهم الراديكال، تفهم الحرف.
+    مثال: <b>好</b> = <b>女</b> (امرأة) + <b>子</b> (طفل) → <b>امرأة تحمل طفلاً = جيد</b>.
+    هذا ما يسمى «الجملة التوضيحية» (mnemonic)، وهو أقوى وسيلة لحفظ الأشكال.
+  </div>
+
+  <footer>الرسم عبر Hanzi Writer (محلي أولاً، ثم CDN) — الصوت من Audio-cmn</footer>
+
+</main>
+
+<script>
+(function(){
+  const HSK_DIR  = 'audio-cmn/64k/hsk/';
+  const SYLL_DIR = 'audio-cmn/64k/syllabs/';
+  const HZ_LOCAL = 'hanzi-data/';
+  const HZ_CDN   = 'https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0.1/';
+
+  let currentWriter = null;
+  let currentChar   = null;
+  let currentRate   = 1.0;
+  let activeAudio   = null;
+
+  const TONE_NAMES = {
+    1: 'النبرة ١ — مستوية',
+    2: 'النبرة ٢ — صاعدة',
+    3: 'النبرة ٣ — هابطة ثم صاعدة',
+    4: 'النبرة ٤ — هابطة حادة'
+  };
+
+  const characters = [
+    // أرقام
+    { cat:'الأرقام', char:'一', sound:'يِ', meaning:'واحد', tone:1, audio:'yi1', mnemonic:'خط واحد → واحد' },
+    { cat:'الأرقام', char:'二', sound:'عَر', meaning:'اثنان', tone:4, audio:'er4', mnemonic:'خطان → اثنان' },
+    { cat:'الأرقام', char:'三', sound:'سَان', meaning:'ثلاثة', tone:1, audio:'san1', mnemonic:'ثلاثة خطوط → ثلاثة' },
+    { cat:'الأرقام', char:'四', sound:'سِ', meaning:'أربعة', tone:4, audio:'si4' },
+    { cat:'الأرقام', char:'五', sound:'وُو', meaning:'خمسة', tone:3, audio:'wu3' },
+    { cat:'الأرقام', char:'六', sound:'لِيُو', meaning:'ستة', tone:4, audio:'liu4' },
+    { cat:'الأرقام', char:'七', sound:'چِي', meaning:'سبعة', tone:1, audio:'qi1' },
+    { cat:'الأرقام', char:'八', sound:'بَا', meaning:'ثمانية', tone:1, audio:'ba1' },
+    { cat:'الأرقام', char:'九', sound:'جِيُو', meaning:'تسعة', tone:3, audio:'jiu3' },
+    { cat:'الأرقام', char:'十', sound:'شِ', meaning:'عشرة', tone:2, audio:'shi2', mnemonic:'خط أفقي + خط عمودي = عشرة' },
+    // ضمائر
+    { cat:'الضمائر', char:'我', sound:'وُو', meaning:'أنا', tone:3, audio:'wo3' },
+    { cat:'الضمائر', char:'你', sound:'نِي', meaning:'أنتَ', tone:3, audio:'ni3' },
+    { cat:'الضمائر', char:'他', sound:'تَا', meaning:'هو', tone:1, audio:'ta1' },
+    { cat:'الضمائر', char:'她', sound:'تَا', meaning:'هي', tone:1, audio:'ta1' },
+    // أساسية
+    { cat:'كلمات أساسية', char:'好', sound:'هَاو', meaning:'جيد', tone:3, audio:'hao3',
+      radical:{ parts:['女','子'], mnemonic:'امرأة (女) تحمل طفلاً (子) → جيد (好)' } },
+    { cat:'كلمات أساسية', char:'是', sound:'شِ', meaning:'يكون', tone:4, audio:'shi4' },
+    { cat:'كلمات أساسية', char:'不', sound:'بُو', meaning:'لا', tone:4, audio:'bu4' },
+    { cat:'كلمات أساسية', char:'人', sound:'ژِن', meaning:'إنسان', tone:2, audio:'ren2',
+      mnemonic:'الشكل يشبه إنساناً واقفاً على قدميه' },
+    { cat:'كلمات أساسية', char:'大', sound:'دَا', meaning:'كبير', tone:4, audio:'da4',
+      mnemonic:'إنسان (人) باسط ذراعيه → كبير (大)' },
+    { cat:'كلمات أساسية', char:'小', sound:'شِيَاو', meaning:'صغير', tone:3, audio:'xiao3' },
+    { cat:'كلمات أساسية', char:'水', sound:'شُوِي', meaning:'ماء', tone:3, audio:'shui3' },
+    { cat:'كلمات أساسية', char:'火', sound:'هُوُو', meaning:'نار', tone:3, audio:'huo3' },
+    { cat:'كلمات أساسية', char:'山', sound:'شَان', meaning:'جبل', tone:1, audio:'shan1',
+      mnemonic:'ثلاث قمم → جبل (山)' },
+    { cat:'كلمات أساسية', char:'口', sound:'كُوو', meaning:'فم', tone:3, audio:'kou3',
+      mnemonic:'مربع مفتوح → فم (口)' },
+    { cat:'كلمات أساسية', char:'日', sound:'ژِ', meaning:'شمس / يوم', tone:4, audio:'ri4',
+      mnemonic:'دائرة بنقطة في المنتصف → شمس (日)' },
+    { cat:'كلمات أساسية', char:'月', sound:'يُوِه', meaning:'قمر / شهر', tone:4, audio:'yue4' },
+    // مكونات
+    { cat:'مكونات', char:'女', sound:'نُوِ', meaning:'امرأة', tone:3, audio:'nv3' },
+    { cat:'مكونات', char:'子', sound:'زِ', meaning:'طفل', tone:3, audio:'zi3',
+      mnemonic:'طفل باسط ذراعيه' },
+    { cat:'مكونات', char:'木', sound:'مُو', meaning:'خشب / شجرة', tone:4, audio:'mu4',
+      mnemonic:'شكل شجرة بجذور وأغصان' },
+    { cat:'مكونات', char:'心', sound:'شِين', meaning:'قلب', tone:1, audio:'xin1' },
+    { cat:'مكونات', char:'手', sound:'شُوُو', meaning:'يد', tone:3, audio:'shou3' },
+    // مركّبات
+    { cat:'مركّبات', char:'明', sound:'مِين', meaning:'مضيء', tone:2, audio:'ming2',
+      radical:{ parts:['日','月'], mnemonic:'شمس (日) + قمر (月) → مضيء (明)' } },
+    { cat:'مركّبات', char:'林', sound:'لِين', meaning:'غابة', tone:2, audio:'lin2',
+      radical:{ parts:['木','木'], mnemonic:'شجرتان (木木) → غابة (林)' } },
+    { cat:'مركّبات', char:'休', sound:'شِيُو', meaning:'يستريح', tone:1, audio:'xiu1',
+      radical:{ parts:['亻','木'], mnemonic:'إنسان (亻) تحت شجرة (木) → يستريح (休)' } },
+    { cat:'مركّبات', char:'家', sound:'جِيَا', meaning:'بيت / عائلة', tone:1, audio:'jia1',
+      radical:{ parts:['宀','豕'], mnemonic:'سقف (宀) فوق خنزير (豕) → بيت/عائلة (家) — الخنزير = ثروة قديماً' } },
+    { cat:'مركّبات', char:'国', sound:'گُوُو', meaning:'دولة', tone:2, audio:'guo2',
+      radical:{ parts:['囗','玉'], mnemonic:'حدود (囗) حول يشم (玉) → دولة (国)' } },
+    { cat:'مركّبات', char:'天', sound:'تِيَان', meaning:'سماء', tone:1, audio:'tian1',
+      radical:{ parts:['一','大'], mnemonic:'خط فوق الكبير (大) → سماء (天)' } },
+    // أفعال HSK 1
+    { cat:'أفعال HSK 1', char:'学', sound:'شُوِه', meaning:'يتعلم / يدرس', tone:2, audio:'xue2',
+      radical:{ parts:['冖','子'], mnemonic:'طفل (子) يتعلم تحت سقف (冖)' } },
+    { cat:'أفعال HSK 1', char:'生', sound:'شِنگ', meaning:'يولد / طالب', tone:1, audio:'sheng1',
+      mnemonic:'نبتة تنمو من الأرض → ولادة وحياة' },
+    { cat:'أفعال HSK 1', char:'吃', sound:'چِ', meaning:'يأكل', tone:1, audio:'chi1',
+      radical:{ parts:['口','乞'], mnemonic:'فم (口) يطلب طعاماً → يأكل' } },
+    { cat:'أفعال HSK 1', char:'喝', sound:'هِ', meaning:'يشرب', tone:1, audio:'he1',
+      radical:{ parts:['口','曷'], mnemonic:'فم (口) يتناول سائلاً → يشرب' } },
+    { cat:'أفعال HSK 1', char:'看', sound:'كَان', meaning:'ينظر / يقرأ', tone:4, audio:'kan4',
+      radical:{ parts:['手','目'], mnemonic:'يد (手) فوق عين (目) للاستشراف والنظر' } },
+    { cat:'أفعال HSK 1', char:'听', sound:'تِينگ', meaning:'يستمع', tone:1, audio:'ting1',
+      radical:{ parts:['口','斤'], mnemonic:'فم (口) ينقل صوتاً إلى الأذن' } },
+    { cat:'أفعال HSK 1', char:'说', sound:'شُوُو', meaning:'يتكلم / يقول', tone:1, audio:'shuo1',
+      radical:{ parts:['讠','兑'], mnemonic:'رمز الكلام (讠) يخرج مسروراً' } },
+    { cat:'أفعال HSK 1', char:'写', sound:'شِيِه', meaning:'يكتب', tone:3, audio:'xie3',
+      radical:{ parts:['冖','与'], mnemonic:'الكتابة تحت سقف المكتب' } },
+    { cat:'أفعال HSK 1', char:'去', sound:'چُو', meaning:'يذهب', tone:4, audio:'qu4',
+      mnemonic:'خطوات تبتعد عن المكان' },
+    { cat:'أفعال HSK 1', char:'来', sound:'لَاي', meaning:'يأتي', tone:2, audio:'lai2',
+      mnemonic:'حبات قمح تقبل وتأتي من بعيد' },
+    { cat:'أفعال HSK 1', char:'有', sound:'يُو', meaning:'يملك / يوجد', tone:3, audio:'you3',
+      radical:{ parts:['𠂇','月'], mnemonic:'يد تحمل قطعة لحم (月) → امتلاك' } },
+    { cat:'أفعال HSK 1', char:'没', sound:'مِي', meaning:'ليس / نفي', tone:2, audio:'mei2',
+      radical:{ parts:['氵','殳'], mnemonic:'ماء (氵) يغمر الشيء فيختفي' } },
+    // أشياء ومفاهيم
+    { cat:'أشياء ومفاهيم', char:'书', sound:'شُو', meaning:'كتاب', tone:1, audio:'shu1',
+      mnemonic:'مجموعة صفحات مربوطة مع شريط' },
+    { cat:'أشياء ومفاهيم', char:'中', sound:'ژُونگ', meaning:'وسط / الصين', tone:1, audio:'zhong1',
+      mnemonic:'خط يخترق المركز في المنتصف' },
+    { cat:'أشياء ومفاهيم', char:'文', sound:'وِن', meaning:'نص / لغة', tone:2, audio:'wen2',
+      mnemonic:'نقوش متقاطعة تشكّل ثقافة ولغة' },
+    { cat:'أشياء ومفاهيم', char:'门', sound:'مِين', meaning:'باب', tone:2, audio:'men2',
+      mnemonic:'مصراعا باب مفتوح' },
+    { cat:'أشياء ومفاهيم', char:'车', sound:'چِ', meaning:'عربة / سيارة', tone:1, audio:'che1',
+      mnemonic:'هيكل عربة مع محور وعجلات' },
+    { cat:'أشياء ومفاهيم', char:'电', sound:'دْيَان', meaning:'كهرباء', tone:4, audio:'dian4',
+      mnemonic:'برق ورعد يسري كشحنة كهربائية' },
+    { cat:'أشياء ومفاهيم', char:'话', sound:'هُوَا', meaning:'كلام / حديث', tone:4, audio:'hua4',
+      radical:{ parts:['讠','舌'], mnemonic:'كلام (讠) يخرج من اللسان (舌)' } },
+    // حيوانات وطبيعة
+    { cat:'حيوانات وطبيعة', char:'马', sound:'مَـا', meaning:'حصان', tone:3, audio:'ma3',
+      mnemonic:'حصان يعدو برأسه وعرف رقبته' },
+    { cat:'حيوانات وطبيعة', char:'鸟', sound:'نْيَاو', meaning:'طائر', tone:3, audio:'niao3',
+      mnemonic:'طائر بجناحيه وعين صغيرة' },
+    { cat:'حيوانات وطبيعة', char:'鱼', sound:'يُو', meaning:'سمك', tone:2, audio:'yu2',
+      mnemonic:'رأس سمكة مع حراشف وذيل' },
+    { cat:'حيوانات وطبيعة', char:'羊', sound:'يَانگ', meaning:'خروف / ماعز', tone:2, audio:'yang2',
+      mnemonic:'قرنا خروف مع رأس وأرجل' },
+    { cat:'حيوانات وطبيعة', char:'牛', sound:'نْيُو', meaning:'ثور / بقرة', tone:2, audio:'niu2',
+      mnemonic:'رأس ثور بقرنين بارزين' },
+    // المكان والاتجاهات
+    { cat:'المكان والاتجاهات', char:'上', sound:'شَانگ', meaning:'أعلى / فوق', tone:4, audio:'shang4',
+      mnemonic:'خط يشير إلى ما فوق القاعدة' },
+    { cat:'المكان والاتجاهات', char:'下', sound:'شْيَا', meaning:'أسفل / تحت', tone:4, audio:'xia4',
+      mnemonic:'خط يشير إلى ما تحت القاعدة' },
+    { cat:'المكان والاتجاهات', char:'里', sound:'لِي', meaning:'داخل', tone:3, audio:'li3',
+      radical:{ parts:['田','土'], mnemonic:'حقل (田) وأرض (土) يحيطان بما في الداخل' } },
+    { cat:'المكان والاتجاهات', char:'前', sound:'چْيَان', meaning:'أمام / قبل', tone:2, audio:'qian2',
+      mnemonic:'شخص يتقدم إلى الأمام' },
+    { cat:'المكان والاتجاهات', char:'后', sound:'هُوو', meaning:'خلف / بعد', tone:4, audio:'hou4',
+      mnemonic:'المشي خلف الموكب' },
+    { cat:'المكان والاتجاهات', char:'在', sound:'زَاي', meaning:'يتواجد في', tone:4, audio:'zai4',
+      mnemonic:'كائن قائم على الأرض في مكان محدد' },
+    // أدوات واستفهام
+    { cat:'أدوات واستفهام', char:'这', sound:'ژِه', meaning:'هذا', tone:4, audio:'zhe4',
+      radical:{ parts:['辶','文'], mnemonic:'طريق (辶) نحو هذا الشيء القريب' } },
+    { cat:'أدوات واستفهام', char:'那', sound:'نَا', meaning:'ذلك (للبعيد)', tone:4, audio:'na4',
+      mnemonic:'إشارة إلى شيء بعيد هناك' },
+    { cat:'أدوات واستفهام', char:'哪', sound:'نَا', meaning:'أي؟ / أين؟', tone:3, audio:'na3',
+      radical:{ parts:['口','那'], mnemonic:'فم يسأل عن المكان: أين؟' } },
+    { cat:'أدوات واستفهام', char:'谁', sound:'شِي', meaning:'من؟', tone:2, audio:'shei2',
+      radical:{ parts:['讠','隹'], mnemonic:'كلام يسأل عن شخص: من هذا؟' } },
+    { cat:'أدوات واستفهام', char:'很', sound:'هِن', meaning:'جداً', tone:3, audio:'hen3',
+      radical:{ parts:['彳','艮'], mnemonic:'خطوات واسعة تدل على الشدة' } },
+    { cat:'أدوات واستفهام', char:'也', sound:'يِي', meaning:'أيضاً', tone:3, audio:'ye3',
+      mnemonic:'أداة ربط تدل على المشاركة' },
+    { cat:'أدوات واستفهام', char:'都', sound:'دُوو', meaning:'كلاهما / جميعهم', tone:1, audio:'dou1',
+      mnemonic:'تجمع المدينة كلها في شمل واحد' },
+    { cat:'أدوات واستفهام', char:'个', sound:'گِه', meaning:'أداة عد عامة', tone:4, audio:'ge4',
+      mnemonic:'سهم يشير إلى وحدة واحدة من المعدود' }
+  ];
+
+  // --- تحميل بيانات الحرف (محلي أولاً ثم CDN) ---
+  function loadCharData(ch) {
+    return fetch(HZ_LOCAL + ch + '.json')
+      .then(r => { if (!r.ok) throw 0; return r.json(); })
+      .catch(() => fetch(HZ_CDN + ch + '.json').then(r => {
+        if (!r.ok) throw 0;
+        return r.json();
+      }));
+  }
+
+  // --- تشغيل ملف صوتي ---
+  function playOne(url) {
+    return new Promise(resolve => {
+      const a = new Audio();
+      a.playbackRate = currentRate;
+      let settled = false;
+      const settle = ok => { if (!settled) { settled = true; if (ok) activeAudio = a; resolve(ok); } };
+      a.addEventListener('ended', () => settle(true), { once:true });
+      a.addEventListener('error', () => settle(false), { once:true });
+      a.src = encodeURI(url);
+      const p = a.play();
+      if (p && p.catch) p.catch(() => settle(false));
+    });
+  }
+
+  async function playAudio(data) {
+    if (activeAudio) { try { activeAudio.pause(); } catch(e){} activeAudio = null; }
+    let ok = await playOne(HSK_DIR + 'cmn-' + data.char + '.mp3');
+    if (!ok && data.audio) ok = await playOne(SYLL_DIR + 'cmn-' + data.audio + '.mp3');
+    return ok;
+  }
+
+  // --- تحميل حرف في لوحة التفاصيل ---
+  function loadCharacter(data) {
+    currentChar = data;
+
+    document.getElementById('detail-char').textContent    = data.char;
+    document.getElementById('detail-sound').textContent   = data.sound;
+    document.getElementById('detail-meaning').textContent = data.meaning;
+
+    const toneEl = document.getElementById('detail-tone');
+    toneEl.textContent = TONE_NAMES[data.tone] || '';
+    toneEl.className = 'detail-tone t' + data.tone;
+
+    // المكوّنات / الجملة التوضيحية
+    const radicalEl = document.getElementById('detail-radical');
+    const parts = data.radical ? data.radical.parts : [];
+    const mnemonic = data.radical ? data.radical.mnemonic : (data.mnemonic || '');
+    if (parts.length || mnemonic) {
+      radicalEl.style.display = 'block';
+      radicalEl.innerHTML =
+        (parts.length ? `<div class="radical-parts">${parts.join(' + ')}</div>` : '') +
+        (mnemonic ? `<div class="radical-mnemonic">💡 ${mnemonic}</div>` : '');
+    } else {
+      radicalEl.style.display = 'none';
+    }
+
+    document.getElementById('quiz-result').textContent = '';
+
+    // إنشاء رسّام جديد
+    const target = document.getElementById('writer-target');
+    target.innerHTML = '';
+    currentWriter = HanziWriter.create(target, data.char, {
+      width: 300,
+      height: 300,
+      padding: 20,
+      showOutline: true,
+      strokeColor: '#b5622a',
+      outlineColor: '#e6e0d4',
+      radicalColor: '#2980b9',
+      strokeAnimationSpeed: 1.5,
+      delayBetweenStrokes: 200,
+      charDataLoader: (ch, onLoad, onError) => {
+        loadCharData(ch).then(onLoad).catch(onError);
+      }
+    });
+
+    // تمييز البطاقة
+    document.querySelectorAll('.char-card').forEach(c => {
+      c.classList.toggle('active', c.dataset.char === data.char);
+    });
+
+    // تشغيل تلقائي إن مفعّل
+    if (document.getElementById('auto-audio').checked) {
+      playAudio(data);
+    }
+  }
+
+  // --- ربط الأزرار ---
+  document.getElementById('btn-audio').addEventListener('click', () => {
+    if (currentChar) playAudio(currentChar);
+  });
+
+  document.getElementById('btn-animate').addEventListener('click', () => {
+    if (currentWriter) {
+      document.getElementById('quiz-result').textContent = '';
+      currentWriter.animateCharacter();
+    }
+  });
+
+  document.getElementById('btn-quiz').addEventListener('click', () => {
+    if (currentWriter) {
+      document.getElementById('quiz-result').textContent = '';
+      currentWriter.quiz({
+        onComplete: () => {
+          document.getElementById('quiz-result').textContent = '🎉 أحسنت!';
+
+          // --- progress tracking ---
+          CNProgress.addXP(CNProgress.XP_REWARDS.charWrite);
+          CNProgress.recordActivity('write', { correct: true, char: currentChar ? currentChar.char : null });
+          CNProgress.checkAchievements();
+        }
+      });
+    }
+  });
+
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    if (currentChar) loadCharacter(currentChar);
+  });
+
+  document.getElementById('rate').addEventListener('input', e => {
+    currentRate = parseFloat(e.target.value);
+    document.getElementById('rate-val').textContent = currentRate.toFixed(1) + '×';
+    if (activeAudio) activeAudio.playbackRate = currentRate;
+  });
+
+  // --- بناء الشبكة مجمّعة حسب الفئة ---
+  function buildGrid() {
+    const container = document.getElementById('character-grid');
+    const groups = {};
+    characters.forEach(d => {
+      if (!groups[d.cat]) groups[d.cat] = [];
+      groups[d.cat].push(d);
+    });
+
+    Object.keys(groups).forEach(cat => {
+      const title = document.createElement('h3');
+      title.className = 'group-title';
+      title.textContent = cat;
+      container.appendChild(title);
+
+      const grid = document.createElement('div');
+      grid.className = 'character-grid';
+
+      groups[cat].forEach(d => {
+        const btn = document.createElement('button');
+        btn.className = 'char-card';
+        btn.dataset.char = d.char;
+        btn.innerHTML = `<span class="char-shape">${d.char}</span><span class="char-sound">${d.sound}</span>`;
+        btn.addEventListener('click', () => {
+          loadCharacter(d);
+          document.getElementById('detail-panel').scrollIntoView({ behavior:'smooth', block:'start' });
+        });
+        grid.appendChild(btn);
+      });
+      container.appendChild(grid);
+    });
+  }
+
+  buildGrid();
+  loadCharacter(characters[0]);
+})();
+</script>
+  <script src="player-picker.js"></script>
+</body>
+</html>

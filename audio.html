@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="تعلم نطق الحروف الصينية بالعربية مع الصوت الأصلي والنبرات — HSK ومقاطع صوتية بدون إنترنت">
+<title>أشكال الحروف الصينية — مع الصوت الأصلي</title>
+<link rel="stylesheet" href="common.css">
+<style>
+  :root{
+    --bg:#f7f5f0; --card:#ffffff; --line:#e6e0d4;
+    --txt:#2b2b2b; --muted:#8a8375; --accent:#b5622a;
+    --t1:#c0392b; --t2:#27ae60; --t3:#2980b9; --t4:#8e44ad;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:32px 20px 60px; background:var(--bg);
+    color:var(--txt);
+    font-family:"Noto Naskh Arabic","Traditional Arabic","Segoe UI",serif;
+    line-height:1.7;
+  }
+  .wrap{max-width:1000px;margin:0 auto}
+  .back{display:inline-block; color:var(--muted); text-decoration:none; margin-bottom:14px; font-size:.9rem; transition:color .2s}
+  .back:hover{color:var(--accent)}
+  header{
+    text-align:center; border-bottom:2px solid var(--line);
+    padding-bottom:22px; margin-bottom:26px;
+  }
+  h1{margin:0 0 8px;font-size:1.9rem;color:var(--accent)}
+  header p{margin:0;color:var(--muted);font-size:1rem}
+  .controls{
+    display:flex; flex-wrap:wrap; gap:14px;
+    justify-content:center; align-items:center;
+    background:var(--card); border:1px solid var(--line);
+    border-radius:14px; padding:12px 18px; margin-bottom:26px;
+  }
+  .controls label{font-size:.9rem;color:var(--muted)}
+  .controls input[type="range"]{width:160px;accent-color:var(--accent)}
+  .controls .rate-val{
+    display:inline-block; min-width:42px; text-align:center;
+    font-weight:700; color:var(--accent);
+  }
+  .legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:36px}
+  .legend span{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:999px;padding:6px 14px;font-size:.9rem;
+  }
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-left:6px;vertical-align:middle}
+  h2{
+    font-size:1.25rem;margin:38px 0 16px;
+    padding-right:14px;border-right:5px solid var(--accent);
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+    gap:14px;
+  }
+  .card{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:16px; padding:16px 10px 12px;
+    text-align:center; position:relative;
+    transition:transform .18s, box-shadow .18s, border-color .18s, background .18s;
+    cursor:pointer;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    border-color:var(--accent);
+  }
+  .card.playing{
+    border-color:var(--accent);
+    background:#fff8ef;
+    animation:pulse 1s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 3px rgba(181,98,42,.15)}
+    50%{box-shadow:0 0 0 8px rgba(181,98,42,.05)}
+  }
+  .card::after{
+    content:"🔊";
+    position:absolute; top:8px; left:10px;
+    font-size:.85rem; opacity:0; transition:opacity .2s;
+  }
+  .card:hover::after,
+  .card.playing::after{opacity:1}
+  .shape{
+    font-family:"Noto Sans SC","Microsoft YaHei","PingFang SC","SimHei",sans-serif;
+    font-size:3.4rem; line-height:1.15; display:block; margin-bottom:6px;
+  }
+  .sound{font-size:1.15rem; font-weight:700; color:var(--accent); letter-spacing:.5px}
+  .mean{font-size:.85rem; color:var(--muted); margin-top:2px}
+  .tone{
+    display:inline-block; margin-top:8px; font-size:.72rem;
+    padding:2px 10px; border-radius:999px; color:#fff;
+  }
+  .t1{background:var(--t1)} .t2{background:var(--t2)}
+  .t3{background:var(--t3)} .t4{background:var(--t4)}
+  .combo{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:16px; padding:18px;
+    display:flex; align-items:center; justify-content:center;
+    gap:14px; flex-wrap:wrap;
+  }
+  .combo .shape{font-size:2.6rem;margin:0}
+  .plus{color:var(--muted);font-size:1.4rem}
+  .arrow{color:var(--accent);font-size:1.4rem}
+  .note{
+    background:#fff8ef; border:1px dashed var(--accent);
+    border-radius:14px; padding:16px 20px; margin-top:36px; font-size:.95rem;
+  }
+  .note strong{color:var(--accent)}
+  footer{text-align:center;margin-top:44px;color:var(--muted);font-size:.85rem}
+</style>
+<script src="progress.js"></script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
+
+<main id="main-content" class="wrap">
+  <a href="index.html" class="back">← الرئيسية</a>
+
+  <header>
+    <h1>أشكال الحروف الصينية</h1>
+    <p>اضغط على أي بطاقة لسماع النطق الأصلي — HSK أولاً، ثم المقاطع</p>
+  </header>
+
+  <div class="controls" role="region" aria-label="التحكم بالصوت">
+    <label for="rate">سرعة النطق:</label>
+    <input type="range" id="rate" min="0.5" max="1.2" step="0.1" value="1" aria-label="سرعة النطق">
+    <span class="rate-val" id="rate-val" aria-live="polite">1.0×</span>
+  </div>
+
+  <div class="legend" role="region" aria-label="أسطورة النبرات الصينية">
+    <span><i class="dot" style="background:var(--t1)"></i> النبرة ١ — مستوية</span>
+    <span><i class="dot" style="background:var(--t2)"></i> النبرة ٢ — صاعدة</span>
+    <span><i class="dot" style="background:var(--t3)"></i> النبرة ٣ — هابطة ثم صاعدة</span>
+    <span><i class="dot" style="background:var(--t4)"></i> النبرة ٤ — هابطة حادة</span>
+  </div>
+
+  <h2>الأرقام</h2>
+  <div class="grid">
+    <div class="card" data-hsk="一" data-syll="yi1"><span class="shape">一</span><div class="sound">يِ</div><div class="mean">واحد</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="二" data-syll="er4"><span class="shape">二</span><div class="sound">عَر</div><div class="mean">اثنان</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="三" data-syll="san1"><span class="shape">三</span><div class="sound">سَان</div><div class="mean">ثلاثة</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="四" data-syll="si4"><span class="shape">四</span><div class="sound">سِ</div><div class="mean">أربعة</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="五" data-syll="wu3"><span class="shape">五</span><div class="sound">وُو</div><div class="mean">خمسة</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="六" data-syll="liu4"><span class="shape">六</span><div class="sound">لِيُو</div><div class="mean">ستة</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="七" data-syll="qi1"><span class="shape">七</span><div class="sound">چِي</div><div class="mean">سبعة</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="八" data-syll="ba1"><span class="shape">八</span><div class="sound">بَا</div><div class="mean">ثمانية</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="九" data-syll="jiu3"><span class="shape">九</span><div class="sound">جِيُو</div><div class="mean">تسعة</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="十" data-syll="shi2"><span class="shape">十</span><div class="sound">شِ</div><div class="mean">عشرة</div><span class="tone t2">٢</span></div>
+  </div>
+
+  <h2>الضمائر</h2>
+  <div class="grid">
+    <div class="card" data-hsk="我" data-syll="wo3"><span class="shape">我</span><div class="sound">وُو</div><div class="mean">أنا</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="你" data-syll="ni3"><span class="shape">你</span><div class="sound">نِي</div><div class="mean">أنتَ</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="他" data-syll="ta1"><span class="shape">他</span><div class="sound">تَا</div><div class="mean">هو</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="她" data-syll="ta1"><span class="shape">她</span><div class="sound">تَا</div><div class="mean">هي</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="我们" data-syll="wo3,men5"><span class="shape">我们</span><div class="sound">وُو مٍ</div><div class="mean">نحن</div><span class="tone t3">٣ + محايدة</span></div>
+  </div>
+
+  <h2>كلمات أساسية</h2>
+  <div class="grid">
+    <div class="card" data-hsk="好" data-syll="hao3"><span class="shape">好</span><div class="sound">هَاو</div><div class="mean">جيد</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="是" data-syll="shi4"><span class="shape">是</span><div class="sound">شِ</div><div class="mean">يكون</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="不" data-syll="bu4"><span class="shape">不</span><div class="sound">بُو</div><div class="mean">لا</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="人" data-syll="ren2"><span class="shape">人</span><div class="sound">ژِن</div><div class="mean">إنسان</div><span class="tone t2">٢</span></div>
+    <div class="card" data-hsk="大" data-syll="da4"><span class="shape">大</span><div class="sound">دَا</div><div class="mean">كبير</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="小" data-syll="xiao3"><span class="shape">小</span><div class="sound">شِيَاو</div><div class="mean">صغير</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="水" data-syll="shui3"><span class="shape">水</span><div class="sound">شُوِي</div><div class="mean">ماء</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="火" data-syll="huo3"><span class="shape">火</span><div class="sound">هُوُو</div><div class="mean">نار</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="山" data-syll="shan1"><span class="shape">山</span><div class="sound">شَان</div><div class="mean">جبل</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="口" data-syll="kou3"><span class="shape">口</span><div class="sound">كُوو</div><div class="mean">فم</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="日" data-syll="ri4"><span class="shape">日</span><div class="sound">ژِ</div><div class="mean">شمس / يوم</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="月" data-syll="yue4"><span class="shape">月</span><div class="sound">يُوِه</div><div class="mean">قمر / شهر</div><span class="tone t4">٤</span></div>
+  </div>
+
+  <h2>أفعال شائعة (HSK 1)</h2>
+  <div class="grid">
+    <div class="card" data-hsk="学" data-syll="xue2"><span class="shape">学</span><div class="sound">شُوِه</div><div class="mean">يتعلم / دراسة</div><span class="tone t2">٢</span></div>
+    <div class="card" data-hsk="生" data-syll="sheng1"><span class="shape">生</span><div class="sound">شِنگ</div><div class="mean">يولد / طالب</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="吃" data-syll="chi1"><span class="shape">吃</span><div class="sound">چِ</div><div class="mean">يأكل</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="喝" data-syll="he1"><span class="shape">喝</span><div class="sound">هِ</div><div class="mean">يشرب</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="看" data-syll="kan4"><span class="shape">看</span><div class="sound">كَان</div><div class="mean">يرى / يقرأ</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="听" data-syll="ting1"><span class="shape">听</span><div class="sound">تِينگ</div><div class="mean">يستمع</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="说" data-syll="shuo1"><span class="shape">说</span><div class="sound">شُوُو</div><div class="mean">يتكلم / يقول</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="写" data-syll="xie3"><span class="shape">写</span><div class="sound">شِيِه</div><div class="mean">يكتب</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="去" data-syll="qu4"><span class="shape">去</span><div class="sound">چُو</div><div class="mean">يذهب</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="来" data-syll="lai2"><span class="shape">来</span><div class="sound">لَاي</div><div class="mean">يأتي</div><span class="tone t2">٢</span></div>
+    <div class="card" data-hsk="有" data-syll="you3"><span class="shape">有</span><div class="sound">يُو</div><div class="mean">يملك / يوجد</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="没" data-syll="mei2"><span class="shape">没</span><div class="sound">مِي</div><div class="mean">نفي الملكية / ليس</div><span class="tone t2">٢</span></div>
+  </div>
+
+  <h2>أشياء ومفاهيم يومية</h2>
+  <div class="grid">
+    <div class="card" data-hsk="书" data-syll="shu1"><span class="shape">书</span><div class="sound">شُو</div><div class="mean">كتاب</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="中" data-syll="zhong1"><span class="shape">中</span><div class="sound">ژُونگ</div><div class="mean">وسط / الصين</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="文" data-syll="wen2"><span class="shape">文</span><div class="sound">وِن</div><div class="mean">لغة / نص</div><span class="tone t2">٢</span></div>
+    <div class="card" data-hsk="门" data-syll="men2"><span class="shape">门</span><div class="sound">مِين</div><div class="mean">باب</div><span class="tone t2">٢</span></div>
+    <div class="card" data-hsk="车" data-syll="che1"><span class="shape">车</span><div class="sound">چِ</div><div class="mean">عربة / سيارة</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="电" data-syll="dian4"><span class="shape">电</span><div class="sound">دْيَان</div><div class="mean">كهرباء</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="话" data-syll="hua4"><span class="shape">话</span><div class="sound">هُوَا</div><div class="mean">كلام / لسان</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="电话" data-syll="dian4,hua4"><span class="shape">电话</span><div class="sound">دْيَان هُوَا</div><div class="mean">هاتف</div><span class="tone t4">٤ + ٤</span></div>
+  </div>
+
+  <h2>حيوانات وطبيعة</h2>
+  <div class="grid">
+    <div class="card" data-hsk="马" data-syll="ma3"><span class="shape">马</span><div class="sound">مَـا</div><div class="mean">حصان</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="鸟" data-syll="niao3"><span class="shape">鸟</span><div class="sound">نْيَاو</div><div class="mean">طائر</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="鱼" data-syll="yu2"><span class="shape">鱼</span><div class="sound">يُو</div><div class="mean">سمك</div><span class="tone t2">٢</span></div>
+    <div class="card" data-hsk="羊" data-syll="yang2"><span class="shape">羊</span><div class="sound">يَانگ</div><div class="mean">خروف / ماعز</div><span class="tone t2">٢</span></div>
+    <div class="card" data-hsk="牛" data-syll="niu2"><span class="shape">牛</span><div class="sound">نْيُو</div><div class="mean">بقرة / ثور</div><span class="tone t2">٢</span></div>
+  </div>
+
+  <h2>المكان والاتجاهات</h2>
+  <div class="grid">
+    <div class="card" data-hsk="上" data-syll="shang4"><span class="shape">上</span><div class="sound">شَانگ</div><div class="mean">أعلى / فوق</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="下" data-syll="xia4"><span class="shape">下</span><div class="sound">شْيَا</div><div class="mean">أسفل / تحت</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="里" data-syll="li3"><span class="shape">里</span><div class="sound">لِي</div><div class="mean">داخل</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="前" data-syll="qian2"><span class="shape">前</span><div class="sound">چْيَان</div><div class="mean">أمام / قبل</div><span class="tone t2">٢</span></div>
+    <div class="card" data-hsk="后" data-syll="hou4"><span class="shape">后</span><div class="sound">هُوو</div><div class="mean">خلف / بعد</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="在" data-syll="zai4"><span class="shape">在</span><div class="sound">زَاي</div><div class="mean">يتواجد في / عند</div><span class="tone t4">٤</span></div>
+  </div>
+
+  <h2>أدوات واستفهام (HSK 1)</h2>
+  <div class="grid">
+    <div class="card" data-hsk="这" data-syll="zhe4"><span class="shape">这</span><div class="sound">ژِه</div><div class="mean">هذا</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="那" data-syll="na4"><span class="shape">那</span><div class="sound">نَا</div><div class="mean">ذلك</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="哪" data-syll="na3"><span class="shape">哪</span><div class="sound">نَا</div><div class="mean">أي / أين</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="谁" data-syll="shei2"><span class="shape">谁</span><div class="sound">شِي</div><div class="mean">من؟</div><span class="tone t2">٢</span></div>
+    <div class="card" data-hsk="什么" data-syll="shen2"><span class="shape">什么</span><div class="sound">شِن مِه</div><div class="mean">ماذا؟ / ما</div><span class="tone t2">٢ + محايدة</span></div>
+    <div class="card" data-hsk="很" data-syll="hen3"><span class="shape">很</span><div class="sound">هِن</div><div class="mean">جداً</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="也" data-syll="ye3"><span class="shape">也</span><div class="sound">يِي</div><div class="mean">أيضاً</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="都" data-syll="dou1"><span class="shape">都</span><div class="sound">دُوو</div><div class="mean">كلاهما / جميعهم</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="个" data-syll="ge4"><span class="shape">个</span><div class="sound">گِه</div><div class="mean">أداة عد عامة</div><span class="tone t4">٤</span></div>
+  </div>
+
+  <h2>المكونات الأساسية</h2>
+  <div class="grid">
+    <div class="card" data-hsk="木" data-syll="mu4"><span class="shape">木</span><div class="sound">مُو</div><div class="mean">خشب / شجرة</div><span class="tone t4">٤</span></div>
+    <div class="card" data-hsk="水" data-syll="shui3"><span class="shape">氵</span><div class="sound">شُوِي</div><div class="mean">ماء (مكوّن)</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="人" data-syll="ren2"><span class="shape">亻</span><div class="sound">ژِن</div><div class="mean">إنسان (مكوّن)</div><span class="tone t2">٢</span></div>
+    <div class="card" data-hsk="女" data-syll="nv3"><span class="shape">女</span><div class="sound">نُوِ</div><div class="mean">امرأة</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="心" data-syll="xin1"><span class="shape">心</span><div class="sound">شِين</div><div class="mean">قلب</div><span class="tone t1">١</span></div>
+    <div class="card" data-hsk="手" data-syll="shou3"><span class="shape">手</span><div class="sound">شُوُو</div><div class="mean">يد</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="子" data-syll="zi3"><span class="shape">子</span><div class="sound">زِ</div><div class="mean">طفل</div><span class="tone t3">٣</span></div>
+    <div class="card" data-hsk="草" data-syll="cao3"><span class="shape">艹</span><div class="sound">چَاو</div><div class="mean">عشب (مكوّن)</div><span class="tone t3">٣</span></div>
+  </div>
+
+  <h2>كيف تتشكّل الأشكال</h2>
+  <div class="grid" style="grid-template-columns:1fr">
+    <div class="combo">
+      <span class="shape">女</span><span class="plus">+</span>
+      <span class="shape">子</span><span class="arrow">←</span>
+      <span class="shape">好</span>
+      <span class="sound">هَاو — جيد</span>
+    </div>
+    <div class="combo">
+      <span class="shape">日</span><span class="plus">+</span>
+      <span class="shape">月</span><span class="arrow">←</span>
+      <span class="shape">明</span>
+      <span class="sound">مِين — مضيء</span>
+    </div>
+    <div class="combo">
+      <span class="shape">木</span><span class="plus">+</span>
+      <span class="shape">木</span><span class="arrow">←</span>
+      <span class="shape">林</span>
+      <span class="sound">لِين — غابة</span>
+    </div>
+    <div class="combo">
+      <span class="shape">亻</span><span class="plus">+</span>
+      <span class="shape">木</span><span class="arrow">←</span>
+      <span class="shape">休</span>
+      <span class="sound">شِيُو — يستريح</span>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>كيف يعمل الصوت:</strong>
+    يُجرَّب أولاً ملف HSK <code>cmn-{الكلمة}.mp3</code>،
+    وإن لم يوجد يُشغَّل المقطع من <code>syllabs</code>.
+    كل شيء محلي، بدون TTS وبدون إنترنت.
+  </div>
+
+  <footer>النطق من ملفات Audio-cmn الأصلية — HSK + Syllabs</footer>
+</main>
+
+<script>
+(function(){
+  const HSK_DIR    = 'audio-cmn/64k/hsk/';
+  const SYLL_DIR   = 'audio-cmn/64k/syllabs/';
+  let activeAudios = [];
+  let currentRate  = 1.0;
+
+  // ---- عنصر السرعة ----
+  const rateSlider = document.getElementById('rate');
+  const rateLabel  = document.getElementById('rate-val');
+  rateSlider.addEventListener('input', () => {
+    currentRate = parseFloat(rateSlider.value);
+    rateLabel.textContent = currentRate.toFixed(1) + '×';
+    activeAudios.forEach(a => { try { a.playbackRate = currentRate; } catch(e){} });
+  });
+
+  // ---- إيقاف كل شيء ----
+  function stopAll() {
+    activeAudios.forEach(a => { try { a.pause(); a.currentTime = 0; } catch(e){} });
+    activeAudios = [];
+    document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+  }
+
+  // ---- تشغيل ملف واحد (Promise ينتهي عند الانتهاء أو الفشل) ----
+  function playOne(src) {
+    return new Promise((resolve) => {
+      const a = new Audio();
+      a.preload = 'auto';
+      a.playbackRate = currentRate;
+      let settled = false;
+
+      function settle(ok) {
+        if (settled) return;
+        settled = true;
+        if (ok) activeAudios.push(a);
+        resolve(ok);
+      }
+
+      a.addEventListener('ended', () => settle(true), { once: true });
+      a.addEventListener('error', () => settle(false), { once: true });
+
+      a.src = encodeURI(src);
+      const p = a.play();
+      if (p && p.catch) {
+        p.catch(() => settle(false));
+      }
+    });
+  }
+
+  // ---- تشغيل بطاقة (HSK أولاً، ثم المقاطع) ----
+  async function playCard(card) {
+    stopAll();
+    card.classList.add('playing');
+
+    let ok = false;
+
+    // 1) HSK أولاً
+    const hsk = card.dataset.hsk;
+    if (hsk) {
+      ok = await playOne(`${HSK_DIR}cmn-${hsk}.mp3`);
+    }
+
+    // 2) المقاطع كاحتياطي
+    if (!ok && card.dataset.syll) {
+      for (const s of card.dataset.syll.split(',')) {
+        const partOk = await playOne(`${SYLL_DIR}cmn-${s.trim()}.mp3`);
+        if (partOk) ok = true;
+      }
+    }
+
+    card.classList.remove('playing');
+
+    // --- progress tracking ---
+    if (ok && window.CNProgress) {
+      CNProgress.addXP(CNProgress.XP_REWARDS.audioPlay);
+      CNProgress.recordActivity('audio', { char: card.dataset.hsk });
+      CNProgress.checkAchievements();
+    }
+  }
+
+  // ---- ربط الأحداث ----
+  document.querySelectorAll('.card[data-hsk], .card[data-syll]').forEach(card => {
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.addEventListener('click', () => playCard(card));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        playCard(card);
+      }
+    });
+  });
+})();
+</script>
+<script src="player-picker.js"></script>
+</body>
+</html>

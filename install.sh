@@ -70,6 +70,12 @@ if [ ! -f "china-provinces.json" ]; then
   curl -sSL "https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json" -o "china-provinces.json" || true
 fi
 
+# التأكد من وجود مكتبة الصوتيات
+if [ ! -d "audio-cmn/64k" ]; then
+  echo -e "${YELLOW}📥 جاري استرجاع ملفات الصوت (audio-cmn)...${NC}"
+  git submodule update --init --recursive 2>/dev/null || git clone --depth 1 https://github.com/hugolpz/audio-cmn.git audio-cmn || true
+fi
+
 # إعطاء صلاحيات التشغيل للسكربتات
 chmod +x run.sh start.sh install.sh 2>/dev/null || true
 
